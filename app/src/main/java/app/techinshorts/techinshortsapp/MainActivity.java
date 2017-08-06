@@ -8,6 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import com.android.volley.*;
+import com.android.volley.toolbox.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,7 +22,39 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+    RequestQueue mRequestQueue;
+    final TextView textView = (TextView) findViewById(R.id.textview);
+// Instantiate the cache
+    Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
 
+// Set up the network to use HttpURLConnection as the HTTP client.
+    Network network = new BasicNetwork(new HurlStack());
+
+// Instantiate the RequestQueue with the cache and network.
+    mRequestQueue = new RequestQueue(cache, network);
+
+// Start the queue
+    mRequestQueue.start();
+
+    JsonArrayRequest jsObjRequest = new JsonArrayRequest
+        (Request.Method.GET, "http://192.168.0.108:3000/news.json", null, new Response.Listener<JSONArray>() {
+
+          @Override
+          public void onResponse(JSONArray response) {
+            System.out.println("Response: "  + response);
+            textView.setText(response.toString());
+          }
+        }, new Response.ErrorListener() {
+
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            System.out.println("VolleyError " + error);
+            // TODO Auto-generated method stub
+
+          }
+        });
+    jsObjRequest.setShouldCache(true);
+    mRequestQueue.add(jsObjRequest);
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
