@@ -8,9 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
+import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     RequestQueue mRequestQueue;
+    Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into((ImageView) findViewById(R.id.image));
     final TextView textView = (TextView) findViewById(R.id.textview);
 // Instantiate the cache
     Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
