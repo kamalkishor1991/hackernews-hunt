@@ -1,11 +1,14 @@
 package app.techinshorts.techinshortsapp;
 
 
+        import android.app.Activity;
         import android.content.Context;
         import android.graphics.Color;
         import android.support.v4.view.PagerAdapter;
+        import android.text.Layout;
         import android.util.Log;
         import android.view.Gravity;
+        import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.LinearLayout;
@@ -21,11 +24,12 @@ package app.techinshorts.techinshortsapp;
 public class VerticalPagerAdapter extends PagerAdapter{
 
     private Context mContext;
+
     private int mParent;
     private int mChilds;
     private JSONArray mColors;
 
-    public VerticalPagerAdapter(Context c, int parent, int childs){
+    public VerticalPagerAdapter(Activity c, int parent, int childs){
         mContext = c;
         mParent = parent;
         mChilds = childs;
@@ -59,13 +63,8 @@ public class VerticalPagerAdapter extends PagerAdapter{
         linear.setGravity(Gravity.CENTER);
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         linear.setLayoutParams(lp);
-
-        TextView tvParent = new TextView(mContext);
-        tvParent.setGravity(Gravity.CENTER_HORIZONTAL);
-        tvParent.setText("Parent:" + mParent);
-        tvParent.setTextColor(Color.BLACK);
-        tvParent.setTextSize(70);
-        linear.addView(tvParent);
+        View linearLayout = LayoutInflater.from(mContext).inflate(R.layout.news_card, null);
+        linear.addView(linearLayout);
 
         TextView tvChild = new TextView(mContext);
         tvChild.setGravity(Gravity.CENTER_HORIZONTAL);
