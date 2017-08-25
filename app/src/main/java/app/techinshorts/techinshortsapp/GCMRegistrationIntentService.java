@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import app.techinshorts.techinshortsapp.utils.Utility;
 import cz.msebera.android.httpclient.Header;
 
 
@@ -85,7 +86,7 @@ public class GCMRegistrationIntentService extends IntentService {
         map.put("device[device_token]", device_token);
         map.put("device[timezone]", timezone);
         RequestParams requestParams = new RequestParams(map);
-        String request        = "http://192.168.0.108:3000/devices";
+        String request        = Utility.BASE_URL + "/devices";
         client.post(request, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
