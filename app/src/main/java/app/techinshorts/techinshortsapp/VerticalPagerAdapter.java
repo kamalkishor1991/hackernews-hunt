@@ -1,95 +1,83 @@
 package app.techinshorts.techinshortsapp;
 
+import android.content.Context;
+import android.support.v4.view.PagerAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-        import android.content.Context;
-        import android.graphics.Color;
-        import android.support.v4.view.PagerAdapter;
-        import android.util.Log;
-        import android.view.Gravity;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.LinearLayout;
-        import android.widget.RelativeLayout.LayoutParams;
-        import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
-        import org.json.JSONArray;
-        import org.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        import java.io.IOException;
-        import java.io.InputStream;
+import java.util.ArrayList;
 
-public class VerticalPagerAdapter extends PagerAdapter{
+/**
+ * Created by sp on 21/8/17.
+ */
+public class VerticalPagerAdapter extends PagerAdapter {
 
-    private Context mContext;
-    private int mParent;
-    private int mChilds;
-    private JSONArray mColors;
+    ArrayList<JSONObject> data;
+    Context mContext;
+    LayoutInflater mLayoutInflater;
 
-    public VerticalPagerAdapter(Context c, int parent, int childs){
-        mContext = c;
-        mParent = parent;
-        mChilds = childs;
-        loadJSONFromAsset(c);
-    }
-
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
+    public VerticalPagerAdapter(Context context) {
+        mContext = context;
+        data = new ArrayList<>();
+        mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return mChilds;
+        return data.size();
+    }
+
+    public void addData(JSONArray list) {
+        for (int i = 0; i < list.length(); i++) {
+            try {
+                data.add(list.getJSONObject(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == object;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
+        return view == ((LinearLayout) object);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
 
-        LinearLayout linear = new LinearLayout(mContext);
-        linear.setOrientation(LinearLayout.VERTICAL);
-        linear.setGravity(Gravity.CENTER);
-        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        linear.setLayoutParams(lp);
 
-        TextView tvParent = new TextView(mContext);
-        tvParent.setGravity(Gravity.CENTER_HORIZONTAL);
-        tvParent.setText("Parent:" + mParent);
-        tvParent.setTextColor(Color.BLACK);
-        tvParent.setTextSize(70);
-        linear.addView(tvParent);
 
-        TextView tvChild = new TextView(mContext);
-        tvChild.setGravity(Gravity.CENTER_HORIZONTAL);
-        tvChild.setText("Child:" + position);
-        tvChild.setTextColor(Color.BLACK);
-        tvChild.setTextSize(70);
-        linear.addView(tvChild);
-
-        setColors(position, linear);
-        container.addView(linear);
-        return linear;
-    }
-
-    public void setColors(int position, View layout){
-
+        JSONObject obj = data.get(position);
         try {
-            String colorString = "#FFF";
-            layout.setBackgroundColor(Color.parseColor(colorString));
-        } catch (Exception ex){
-            Log.e("XXX", "Fail to load color ["+mParent+"]["+position+"]");
+            ((TextView)(itemView.findViewById(R.id.title))).setText(obj.getString("title"));
+            ((TextView)(itemView.findViewById(R.id.summary))).setText(obj.getString("summary"));
+
+            Picasso.with(mContext).load(obj.getString("top_image")).into((ImageView)itemView.findViewById(R.id.profileImageView));
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        container.addView(itemView);
+
+
+        return itemView;
     }
 
-    public void loadJSONFromAsset(Context ctx) {
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((LinearLayout) object);
     }
 }
