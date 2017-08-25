@@ -12,13 +12,54 @@
 				android:name=".MainActivity"
 				android:label="@string/app_name"
 				android:theme="@style/AppTheme.NoActionBar">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
 
-				<category android:name="android.intent.category.LAUNCHER"/>
+		</activity>
+		<activity
+			android:name=".SplashActivity"
+			android:theme="@style/SplashTheme">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+
+		<!--
+                    GCM Receiver
+                -->
+		<receiver
+			android:name="com.google.android.gms.gcm.GcmReceiver"
+			android:exported="true"
+			android:permission="com.google.android.c2dm.permission.SEND">
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+				<category android:name="com.gnirt69.gcmexample"/>
+			</intent-filter>
+		</receiver>
+
+		<!--
+            GCM Receiver Service
+        -->
+		<service android:name=".GCMPushReceiverService" android:exported="false">
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+			</intent-filter>
+		</service>
+
+		<!--
+            GCM Registration Intent Service
+        -->
+		<service android:name=".GCMRegistrationIntentService" android:exported="false">
+			<intent-filter>
+				<action android:name="com.google.android.gms.iid.InstanceID"/>
+			</intent-filter>
+		</service>
+
 	</application>
 	<uses-permission android:name="android.permission.INTERNET" />
-
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<permission
+		android:name="net.simplifiedcoding.androidgcm.permission.C2D_MESSAGE"
+		android:protectionLevel="signature" />
+	<uses-permission android:name="net.simplifiedcoding.androidgcm.permission.C2D_MESSAGE" />
 </manifest>
