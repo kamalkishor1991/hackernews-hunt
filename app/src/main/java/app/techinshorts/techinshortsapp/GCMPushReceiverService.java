@@ -18,26 +18,32 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Random;
 
-
-/**
- * Created by Belal on 4/15/2016.
- */
-
-//Class is extending GcmListenerService
 public class GCMPushReceiverService extends GcmListenerService {
 
     //This method will be called on every new message received
     @Override
     public void onMessageReceived(String from, Bundle data) {
         //Getting the message from the bundle
+        String type = data.getString("type");
         String message = data.getString("message");
         String summary = data.getString("summary");
         String imgURL = data.getString("image_url");
-        //Displaying a notiffication with the message
-        sendNotification(message, summary, imgURL);
+        switch (type)  {
+            case "update":
+                updateNews();
+                break;
+            case "notification":
+                sendNotification(message, summary, imgURL);
+                break;
+        }
     }
 
+    private void updateNews() {
+        System.out.println("Update news");
+        throw new RuntimeException("Not implemented");
+    }
     //This method is generating a notification and displaying the notification
     private void sendNotification(String message, String summary, String imageURL) {
         Intent intent = new Intent(this, MainActivity.class);
@@ -72,6 +78,6 @@ public class GCMPushReceiverService extends GcmListenerService {
         notiStyle.bigPicture(remote_picture);
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, noBuilder.build()); //0 = ID of notification
+        notificationManager.notify(new Random().nextInt(), noBuilder.build()); //0 = ID of notification
     }
 }
