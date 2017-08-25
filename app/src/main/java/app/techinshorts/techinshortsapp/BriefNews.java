@@ -6,6 +6,7 @@ package app.techinshorts.techinshortsapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +23,19 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import app.techinshorts.techinshortsapp.utils.PrefUtils;
 
 public class BriefNews extends Fragment {
 
     private VerticalViewPager verticalViewPager;
     VerticalPagerAdapter adapter;
 
-    RequestQueue mRequestQueue;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_style, container, false);
@@ -42,42 +45,15 @@ public class BriefNews extends Fragment {
 
 
 
-        // Instantiate the cache
-    Cache cache = new DiskBasedCache(container.getContext().getCacheDir(), 1024 * 1024); // 1MB cap
-
-// Set up the network to use HttpURLConnection as the HTTP client.
-    Network network = new BasicNetwork(new HurlStack());
-
-// Instantiate the RequestQueue with the cache and network.
-    mRequestQueue = new RequestQueue(cache, network);
-
-// Start the queue
-    mRequestQueue.start();
-
-    JsonArrayRequest jsObjRequest = new JsonArrayRequest
-        (Request.Method.GET, "http://192.168.0.108:3000/news.json", null, new Response.Listener<JSONArray>() {
-
-          @Override
-          public void onResponse(JSONArray response) {
-            System.out.println("Response: "  + response);
-              adapter.addData(response);
-          }
-        }, new Response.ErrorListener() {
-
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            System.out.println("VolleyError " + error);
-            // TODO Auto-generated method stub
-
-          }
-        });
-    jsObjRequest.setShouldCache(true);
-    mRequestQueue.add(jsObjRequest);
-
         return rootView;
     }
 
     public JSONObject getCurrentPage() {
-        return adapter.data.get(verticalViewPager.getCurrentItem());
+        try {
+            return adapter.getData().getJSONObject(verticalViewPager.getCurrentItem());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
