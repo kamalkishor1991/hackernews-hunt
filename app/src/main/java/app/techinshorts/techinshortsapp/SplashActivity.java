@@ -8,8 +8,15 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+
+import org.json.JSONArray;
+
+import app.techinshorts.techinshortsapp.utils.PrefUtils;
+import app.techinshorts.techinshortsapp.utils.Utility;
 
 public class SplashActivity extends AppCompatActivity {
     //Creating a broadcast receiver for gcm registration
@@ -82,6 +89,18 @@ public class SplashActivity extends AppCompatActivity {
                 // close this activity
                 finish();
             }
-        }, 5000);
+        }, 3000);
+        Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                PrefUtils.saveTopNews(getApplicationContext(), response);
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 }

@@ -5,5 +5,6 @@
 	<color name="colorAccent">#FF4081</color>
 	<color name="white">#ffffff</color>
 	<color name="black">#000</color>
+	<color name="grey">#7e7e7e</color>
 	<color name="load_blue">#00b4f1</color>
 </resources>

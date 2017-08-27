@@ -12,13 +12,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Random;
+
+import app.techinshorts.techinshortsapp.utils.PrefUtils;
+import app.techinshorts.techinshortsapp.utils.Utility;
 
 public class GCMPushReceiverService extends GcmListenerService {
 
@@ -41,8 +48,18 @@ public class GCMPushReceiverService extends GcmListenerService {
     }
 
     private void updateNews() {
-        System.out.println("Update news");
-        throw new RuntimeException("Not implemented");
+        Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                PrefUtils.saveTopNews(getApplicationContext(), response);
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
     //This method is generating a notification and displaying the notification
     private void sendNotification(String message, String summary, String imageURL) {

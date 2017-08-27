@@ -159,6 +159,12 @@ public class MainActivity extends AppCompatActivity {
 
     return super.onOptionsItemSelected(item);
   }
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 1) super.onBackPressed();
+        else
+            viewPager.setCurrentItem(1);
+    }
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
 

@@ -19,7 +19,7 @@ public class PrefUtils {
     private static final int NEWS_CACHE_SIZE = 10;
 
 
-    public static void saveTopNews(Context context, JSONArray jsonArray) {
+    public static synchronized void saveTopNews(Context context, JSONArray jsonArray) {
         JSONArray existing =  getTopNews(context);
         JSONArray newList = new JSONArray();
         try {

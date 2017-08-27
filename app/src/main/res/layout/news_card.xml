@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
@@ -7,8 +7,10 @@
 
 	<android.support.v7.widget.CardView
 		android:orientation="vertical"
+		android:id="@+id/main_card"
 		android:background="#fff"
 		android:layout_width="match_parent"
+		android:padding="10dp"
 		android:layout_height="match_parent"
 		app:cardCornerRadius="10dp"
 		app:cardElevation="1dp">
@@ -33,15 +35,24 @@
 				android:layout_weight="55"
 				android:orientation="vertical"
 				android:padding="10dp">
-				<TextView
-					android:id="@+id/title"
-					android:textColor="#505050"
-					android:text="This is a news title"
-					android:layout_width="wrap_content"
-					android:layout_marginBottom="10dp"
-					android:textSize="16dp"
-					android:textStyle="bold"
-					android:layout_height="wrap_content"/>
+				<LinearLayout
+					android:layout_width="fill_parent"
+					android:orientation="horizontal"
+					android:layout_height="wrap_content">
+
+					<TextView
+						android:id="@+id/title"
+						android:gravity="left"
+						android:ellipsize="marquee"
+						android:textColor="#505050"
+						android:text="This is a news asa sas asa sa s as as aaas as as as as as atitle"
+						android:layout_width="wrap_content"
+						android:layout_marginBottom="10dp"
+						android:textSize="16dp"
+						android:textStyle="bold"
+						android:layout_height="wrap_content"/>
+
+				</LinearLayout>
 				<TextView
 					android:id="@+id/summary"
 					android:textColor="#505050"
@@ -54,5 +65,21 @@
 		</LinearLayout>
 
 
+		<LinearLayout
+			android:layout_gravity="bottom"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:background="@drawable/my_shape"
+			android:gravity="center"
+			android:layout_height="40dp">
+
+			<TextView
+				android:text="21 Comments"
+				android:textSize="12dp"
+				android:textColor="#9f9f9f"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+
+		</LinearLayout>
 	</android.support.v7.widget.CardView>
-</LinearLayout>
+</RelativeLayout>
