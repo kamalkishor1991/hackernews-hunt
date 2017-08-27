@@ -16,12 +16,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 
-/**
- * Created by sp on 25/8/17.
- */
 
 public class Utility {
-    public static final String BASE_URL = "http://192.168.0.106:3000";
+    public static final String BASE_URL = "http://hnhunt.com";
     public static String fetchApi(String... args) {
         String url = BASE_URL + "/news.json";
         StringBuilder params = new StringBuilder();

@@ -85,7 +85,10 @@ public class VerticalPagerAdapter extends PagerAdapter {
             ((TextView)(itemView.findViewById(R.id.title))).setText(text);
 
             Picasso.with(mContext).load(obj.getString("top_image")).into((ImageView)itemView.findViewById(R.id.profileImageView));
-
+            TextView comments = (TextView) itemView.findViewById(R.id.comments);
+            TextView points = (TextView) itemView.findViewById(R.id.points);
+            comments.setText(obj.getString("comment_count") + " comments");
+            points.setText(obj.getString("score") + " points");
         } catch (Exception e) {
             e.printStackTrace();
         }
