@@ -44,22 +44,22 @@
 						android:id="@+id/title"
 						android:gravity="left"
 						android:ellipsize="marquee"
-						android:textColor="#505050"
+						android:textColor="#313131"
 						android:text="This is a news asa sas asa sa s as as aaas as as as as as atitle"
 						android:layout_width="wrap_content"
 						android:layout_marginBottom="10dp"
-						android:textSize="16dp"
-						android:textStyle="bold"
+						android:textSize="17sp"
+						android:textStyle="normal"
 						android:layout_height="wrap_content"/>
 
 				</LinearLayout>
 				<TextView
 					android:id="@+id/summary"
-					android:textColor="#505050"
+					android:textColor="#515151"
 					android:text="This is a long news description, lorepsum of somthing blah blah blah lorepsum of somthing blah blah blah lorepsum of somthing blah blah blah lorepsum of somthing blah blah blah"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:textSize="15dp"
+					android:textSize="14sp"
 					android:textStyle="normal"/>
 			</LinearLayout>
 		</LinearLayout>
