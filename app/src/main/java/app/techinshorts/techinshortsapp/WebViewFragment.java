@@ -20,7 +20,7 @@ import java.net.URL;
 
 public class WebViewFragment extends Fragment {
     View rootView;
-
+    WebView webView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,8 +30,11 @@ public class WebViewFragment extends Fragment {
         return rootView;
     }
 
+    public boolean canGoBack() {
+        return webView.canGoBack();
+    }
     public void setUrl(String url) {
-        WebView webView = ((WebView)rootView.findViewById(R.id.webview));
+        webView = ((WebView)rootView.findViewById(R.id.webview));
         try {
             ((TextView)rootView.findViewById(R.id.host)).setText(new URL(url).getHost());
         } catch (MalformedURLException e) {
@@ -60,5 +63,9 @@ public class WebViewFragment extends Fragment {
         webView.loadUrl(url);
 
 
+    }
+
+    public void goBack() {
+        webView.goBack();
     }
 }
