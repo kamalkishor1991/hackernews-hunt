@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "926268486679-3v8knvkceetub03gjt5gudena6g9p58c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.techinshorts.techinshortsapp",
+            "certificate_hash": "6b6e055d6037a645d73931deac25bbad536b8db5"
+          }
+        },
+        {
           "client_id": "926268486679-8vftmppmv57mkh4ajko3u6hgh1378imu.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926268486679-8vftmppmv57mkh4ajko3u6hgh1378imu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
