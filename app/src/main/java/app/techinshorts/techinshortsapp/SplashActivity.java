@@ -1,5 +1,6 @@
 package app.techinshorts.techinshortsapp;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
 
@@ -24,6 +26,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 //Initializing our broadcast receiver
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
 
@@ -37,14 +40,17 @@ public class SplashActivity extends AppCompatActivity {
                 if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)){
                     //Getting the registration token from the intent
                     String token = intent.getStringExtra("token");
+
                     //Displaying the token as toast
-                    Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
 
                     //if the intent is not with success then displaying error messages
                 } else if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)){
                     Toast.makeText(getApplicationContext(), "GCM registration error!", Toast.LENGTH_LONG).show();
+                    FirebaseCrash.log("Registration error:");
                 } else {
                     Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
+                    FirebaseCrash.log("Unknown Registration error occurred");
                 }
             }
         };
@@ -72,35 +78,46 @@ public class SplashActivity extends AppCompatActivity {
             Intent itent = new Intent(this, GCMRegistrationIntentService.class);
             startService(itent);
         }
-        new Handler().postDelayed(new Runnable() {
+        ProgressDialog loading  = new ProgressDialog(this);
+        loading.setCancelable(true);
+        loading.setMessage("Loading ..");
+        loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        if (PrefUtils.isFirstRun(getApplicationContext())) {
 
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    launchMainActivity();
+                }
+            }, 3000);
+        } else {
+            loading.show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    launchMainActivity();
+                }
+            }, 1000);
 
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                Intent i = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(i);
-
-                // close this activity
-                finish();
-            }
-        }, 3000);
+        }
         Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 PrefUtils.saveTopNews(getApplicationContext(), response);
+                PrefUtils.setFirstRun(getApplicationContext());
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                FirebaseCrash.log("On error fetch news: " + error.toString());
             }
         });
+    }
+
+    private void launchMainActivity() {
+        Intent i = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(i);
+        finish();
     }
 }
