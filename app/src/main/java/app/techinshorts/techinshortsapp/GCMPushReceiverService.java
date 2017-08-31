@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -57,7 +58,7 @@ public class GCMPushReceiverService extends GcmListenerService {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                FirebaseCrash.log("VolleyError: " + error);
             }
         });
     }
@@ -89,6 +90,7 @@ public class GCMPushReceiverService extends GcmListenerService {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(remote_picture)
                 .setContentText(message)
+                .setSound(sound)
                 .setAutoCancel(true).setStyle(notiStyle)
                 .setContentIntent(pendingIntent);
 // Add the big picture to the style.

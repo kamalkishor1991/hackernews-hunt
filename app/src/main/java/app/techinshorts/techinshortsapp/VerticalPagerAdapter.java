@@ -27,9 +27,7 @@ import java.net.URL;
 import app.techinshorts.techinshortsapp.utils.PrefUtils;
 import app.techinshorts.techinshortsapp.utils.Utility;
 
-/**
- * Created by sp on 21/8/17.
- */
+
 public class VerticalPagerAdapter extends PagerAdapter {
 
     private JSONArray data;

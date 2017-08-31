@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.android.volley.*;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,63 +26,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     private ViewPager viewPager;
     WebViewFragment comments, orginal;
 
     @Override
   protected void onCreate(Bundle savedInstanceState) {
-//    super.onCreate(savedInstanceState);
-//    setContentView(R.layout.activity_main);
-//    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//    setSupportActionBar(toolbar);
-//    RequestQueue mRequestQueue;
-//    Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into((ImageView) findViewById(R.id.image));
-//    final TextView textView = (TextView) findViewById(R.id.textview);
-//// Instantiate the cache
-//    Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-//
-//// Set up the network to use HttpURLConnection as the HTTP client.
-//    Network network = new BasicNetwork(new HurlStack());
-//
-//// Instantiate the RequestQueue with the cache and network.
-//    mRequestQueue = new RequestQueue(cache, network);
-//
-//// Start the queue
-//    mRequestQueue.start();
-//
-//    JsonArrayRequest jsObjRequest = new JsonArrayRequest
-//        (Request.Method.GET, "http://192.168.0.108:3000/news.json", null, new Response.Listener<JSONArray>() {
-//
-//          @Override
-//          public void onResponse(JSONArray response) {
-//            System.out.println("Response: "  + response);
-//            textView.setText(response.toString());
-//          }
-//        }, new Response.ErrorListener() {
-//
-//          @Override
-//          public void onErrorResponse(VolleyError error) {
-//            System.out.println("VolleyError " + error);
-//            // TODO Auto-generated method stub
-//
-//          }
-//        });
-//    jsObjRequest.setShouldCache(true);
-//    mRequestQueue.add(jsObjRequest);
-//    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//    fab.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View view) {
-//        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//            .setAction("Action", null).show();
-//      }
-//    });
         super.onCreate(savedInstanceState);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         Window window = getWindow();
-
+        mFirebaseAnalytics.logEvent("main_activity", null);
 // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
@@ -127,7 +83,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+
                 JSONObject obj = briefNews.getCurrentPage();
+                try {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("hn_id", obj.getString("hn_id"));
+                    bundle.putString("position", position + "");
+                    mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 try {
                     comments.setUrl(obj.getString("comment_url"));
                     orginal.setUrl(obj.getString("url"));
