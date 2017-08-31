@@ -90,6 +90,7 @@ public class GCMPushReceiverService extends GcmListenerService {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(remote_picture)
                 .setContentText(message)
+                .setSound(sound)
                 .setAutoCancel(true).setStyle(notiStyle)
                 .setContentIntent(pendingIntent);
 // Add the big picture to the style.
