@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 
 import java.net.URL;
+import java.util.Date;
 
 import app.techinshorts.techinshortsapp.utils.PrefUtils;
 import app.techinshorts.techinshortsapp.utils.Utility;
@@ -87,6 +88,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             TextView points = (TextView) itemView.findViewById(R.id.points);
             comments.setText(obj.getString("comment_count") + " comments");
             points.setText(obj.getString("score") + " points");
+            ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
         } catch (Exception e) {
             e.printStackTrace();
         }

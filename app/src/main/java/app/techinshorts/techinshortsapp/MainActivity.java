@@ -85,23 +85,23 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
 
                 JSONObject obj = briefNews.getCurrentPage();
-                try {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("hn_id", obj.getString("hn_id"));
-                    bundle.putString("position", position + "");
-                    mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
+                if (obj != null) {
+                    try {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("hn_id", obj.getString("hn_id"));
+                        bundle.putString("position", position + "");
+                        mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        comments.setUrl(obj.getString("comment_url"));
+                        orginal.setUrl(obj.getString("url"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                try {
-                    comments.setUrl(obj.getString("comment_url"));
-                    orginal.setUrl(obj.getString("url"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
             }
 
             @Override
