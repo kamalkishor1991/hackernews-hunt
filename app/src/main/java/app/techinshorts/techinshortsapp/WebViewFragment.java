@@ -1,8 +1,6 @@
 package app.techinshorts.techinshortsapp;
 
-/**
- * Created by sp on 25/8/17.
- */
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,8 +17,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class WebViewFragment extends Fragment {
-    View rootView;
-    WebView webView;
+    private View rootView;
+    private WebView webView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,18 +30,30 @@ public class WebViewFragment extends Fragment {
     }
 
     public boolean canGoBack() {
-        return webView.canGoBack();
+        // System.out.println("Can go back: " + webView.canGoBack() + "," + webView.getUrl() + "," + webView.getOriginalUrl() + "," +  webView.copyBackForwardList().getSize());
+        return webView.copyBackForwardList().getSize() > 2;
     }
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         webView = ((WebView)rootView.findViewById(R.id.webview));
+
         try {
             ((TextView)rootView.findViewById(R.id.host)).setText(new URL(url).getHost());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient() {
 
+            @Override
+            public void onPageFinished(WebView view, String u) {
+                if (u.equals("about:blank")) {
+                    webView.clearHistory(); // TODO: this does not work
+                    webView.loadUrl(url);
+                    super.onPageFinished(view, u);
+                }
+            }
+        });
         webView.setWebChromeClient(new WebChromeClient() {
+            @Override
             public void onProgressChanged(WebView view, int progress) {
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                         0,
@@ -56,15 +67,13 @@ public class WebViewFragment extends Fragment {
                         1 - progress/100.0f == 0 ? 1 : 1 - progress/100.0f
                 );
                 rootView.findViewById(R.id.unloader).setLayoutParams(param);
-
             }
+
         });
         webView.loadUrl("about:blank");
-        webView.loadUrl(url);
 
 
     }
-
     public void goBack() {
         webView.goBack();
     }

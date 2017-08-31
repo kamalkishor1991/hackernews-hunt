@@ -131,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             if (viewPager.getCurrentItem() == 0 && comments.canGoBack()) {
                 comments.goBack();
+            } else if (viewPager.getCurrentItem() == 2 && orginal.canGoBack()) {
+                orginal.goBack();
             } else {
                 viewPager.setCurrentItem(1);
             }

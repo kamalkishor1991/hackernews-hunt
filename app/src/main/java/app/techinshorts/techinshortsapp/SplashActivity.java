@@ -78,10 +78,7 @@ public class SplashActivity extends AppCompatActivity {
             Intent itent = new Intent(this, GCMRegistrationIntentService.class);
             startService(itent);
         }
-        ProgressDialog loading  = new ProgressDialog(this);
-        loading.setCancelable(true);
-        loading.setMessage("Loading ..");
-        loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
         if (PrefUtils.isFirstRun(getApplicationContext())) {
 
             new Handler().postDelayed(new Runnable() {
@@ -91,7 +88,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }, 3000);
         } else {
-            loading.show();
+            showLoading();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -113,6 +110,14 @@ public class SplashActivity extends AppCompatActivity {
                 FirebaseCrash.log("On error fetch news: " + error.toString());
             }
         });
+    }
+
+    private void showLoading() {
+        ProgressDialog loading  = new ProgressDialog(this);
+        loading.setCancelable(true);
+        loading.setMessage("Loading ..");
+        loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        loading.show();
     }
 
     private void launchMainActivity() {
