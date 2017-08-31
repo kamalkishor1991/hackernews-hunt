@@ -7,7 +7,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/fg"/>
+            android:src="@drawable/hnhunt"/>
     </item>
 
 </layer-list>

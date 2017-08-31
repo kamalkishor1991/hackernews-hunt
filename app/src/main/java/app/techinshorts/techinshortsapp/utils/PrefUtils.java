@@ -16,7 +16,8 @@ import org.json.JSONObject;
 
 public class PrefUtils {
     private static final String TOP_NEWS = "top_news";
-    private static final int NEWS_CACHE_SIZE = 10;
+    private static final String FIRST_RUN = "first_run";
+    private static final int NEWS_CACHE_SIZE = 15;
 
 
     public static synchronized void saveTopNews(Context context, JSONArray jsonArray) {
@@ -49,6 +50,13 @@ public class PrefUtils {
         } catch (JSONException e) {
             return new JSONArray();
         }
+    }
+
+    public static void setFirstRun(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(FIRST_RUN, false).apply();
+    }
+    public static boolean isFirstRun(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(FIRST_RUN, true);
     }
 
 }
