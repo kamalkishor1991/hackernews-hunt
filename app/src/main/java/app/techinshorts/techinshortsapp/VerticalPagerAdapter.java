@@ -2,7 +2,9 @@ package app.techinshorts.techinshortsapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -59,6 +62,20 @@ public class VerticalPagerAdapter extends PagerAdapter {
     }
     public JSONArray getData() {
         return data;
+    }
+
+    public void resetNewData(JSONArray newData) {
+        try {
+
+            if (newData.getJSONObject(0).getInt("id") > data.getJSONObject(0).getInt("id")) {
+                data = newData;
+                notifyDataSetChanged();
+            }
+
+        } catch (JSONException e) {
+
+            FirebaseCrash.log("exception while getting data: " + e);
+        }
     }
 
     @Override
@@ -132,5 +149,10 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
                     }
                 });
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 }

@@ -1,4 +1,9 @@
-<app.techinshorts.techinshortsapp.VerticalViewPager android:id="@+id/verticleViewPager"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <app.techinshorts.techinshortsapp.VerticalViewPager android:id="@+id/verticleViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</android.support.v4.widget.SwipeRefreshLayout>
