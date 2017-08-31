@@ -2,7 +2,9 @@ package app.techinshorts.techinshortsapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 
 
 import java.net.URL;
+import java.util.Date;
 
 import app.techinshorts.techinshortsapp.utils.PrefUtils;
 import app.techinshorts.techinshortsapp.utils.Utility;
@@ -60,6 +64,20 @@ public class VerticalPagerAdapter extends PagerAdapter {
         return data;
     }
 
+    public void resetNewData(JSONArray newData) {
+        try {
+
+            if (newData.getJSONObject(0).getInt("id") > data.getJSONObject(0).getInt("id")) {
+                data = newData;
+                notifyDataSetChanged();
+            }
+
+        } catch (JSONException e) {
+
+            FirebaseCrash.log("exception while getting data: " + e);
+        }
+    }
+
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == (object);
@@ -87,6 +105,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             TextView points = (TextView) itemView.findViewById(R.id.points);
             comments.setText(obj.getString("comment_count") + " comments");
             points.setText(obj.getString("score") + " points");
+            ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -130,5 +149,10 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
                     }
                 });
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 }

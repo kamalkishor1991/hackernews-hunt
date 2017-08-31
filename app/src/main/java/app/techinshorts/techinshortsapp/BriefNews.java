@@ -5,21 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 
@@ -28,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import app.techinshorts.techinshortsapp.utils.PrefUtils;
+import app.techinshorts.techinshortsapp.utils.Utility;
 
 public class BriefNews extends Fragment {
 
@@ -44,6 +36,7 @@ public class BriefNews extends Fragment {
         verticalViewPager = (VerticalViewPager) rootView.findViewById(R.id.verticleViewPager);
         verticalViewPager.setAdapter(adapter = new VerticalPagerAdapter(container.getContext()));
 
+        final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
         verticalViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -52,6 +45,10 @@ public class BriefNews extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
+
+                if (position == 0) swipeView.setEnabled(true);
+                else swipeView.setEnabled(false);
+
                 Bundle bundle = new Bundle();
 
                 bundle.putString("position", position + "");
@@ -60,6 +57,29 @@ public class BriefNews extends Fragment {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeView.setRefreshing(true);
+                Utility.fetchNews(container.getContext(), null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        PrefUtils.saveTopNews(container.getContext(), response);
+                        adapter.resetNewData(response);
+                        swipeView.setRefreshing(false);
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        swipeView.setRefreshing(false);
+
+                    }
+                });
 
             }
         });

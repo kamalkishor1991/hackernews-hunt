@@ -15,6 +15,9 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Date;
 
 
 public class Utility {
@@ -52,5 +55,10 @@ public class Utility {
                 (Request.Method.GET, Utility.fetchApi("offset", offset), null, successListener, errorListener);
         jsObjRequest.setShouldCache(true);
         mRequestQueue.add(jsObjRequest);
+    }
+
+    public static String formatTime(Date date) {
+        PrettyTime p = new PrettyTime();
+        return p.format(date);
     }
 }
