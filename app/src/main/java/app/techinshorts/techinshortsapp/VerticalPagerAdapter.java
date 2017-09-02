@@ -2,6 +2,7 @@ package app.techinshorts.techinshortsapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,9 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.firebase.crash.FirebaseCrash;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -30,6 +37,7 @@ import java.util.Date;
 
 import app.techinshorts.techinshortsapp.utils.PrefUtils;
 import app.techinshorts.techinshortsapp.utils.Utility;
+import cz.msebera.android.httpclient.Header;
 
 
 public class VerticalPagerAdapter extends PagerAdapter {
@@ -86,7 +94,6 @@ public class VerticalPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
-
         try {
             JSONObject obj = data.getJSONObject(position);
             String title = obj.getString("title");
@@ -103,9 +110,9 @@ public class VerticalPagerAdapter extends PagerAdapter {
             Picasso.with(mContext).load(obj.getString("top_image")).into((ImageView)itemView.findViewById(R.id.profileImageView));
             TextView comments = (TextView) itemView.findViewById(R.id.comments);
             TextView points = (TextView) itemView.findViewById(R.id.points);
-            comments.setText(obj.getString("comment_count") + " comments");
-            points.setText(obj.getString("score") + " points");
+            setCommentAndPoints(comments, points, obj.getString("comment_count") , obj.getString("score") );
             ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
+            updateCommentsAndPoints(obj.getLong("hn_id"), comments, points);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,6 +128,30 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
 
         return itemView;
+    }
+
+    private void setCommentAndPoints(TextView comments, TextView points, String comment_count, String score)  {
+        comments.setText(comment_count + " comments");
+        points.setText(score +  " points");
+    }
+
+    private void updateCommentsAndPoints(final long hnId, final TextView comments, final TextView points) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("https://hacker-news.firebaseio.com/v0/item/" + hnId + ".json", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    String cts = response.getString("descendants");
+                    String score = response.getInt("score") + "";
+                    setCommentAndPoints(comments, points, cts, score);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
+                    //TODO: put toast here ~ unable to update comments and points info
+                }
+            }
+        });
+
     }
 
     @Override

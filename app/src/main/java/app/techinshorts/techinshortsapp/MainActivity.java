@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private ViewPager viewPager;
-
+    WebViewFragment comments, orginal;
 
     @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         final BriefNews briefNews;
-        final WebViewFragment comments, orginal;
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(comments = new WebViewFragment());
         adapter.addFragment(briefNews = new BriefNews());
@@ -128,8 +128,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 1) super.onBackPressed();
-        else
-            viewPager.setCurrentItem(1);
+        else {
+            if (viewPager.getCurrentItem() == 0 && comments.canGoBack()) {
+                comments.goBack();
+            } else if (viewPager.getCurrentItem() == 2 && orginal.canGoBack()) {
+                orginal.goBack();
+            } else {
+                viewPager.setCurrentItem(1);
+            }
+        }
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
