@@ -102,7 +102,7 @@ public class GCMPushReceiverService extends GcmListenerService {
         //contentViewBig.setTextViewText(R.id.big_text, "kdasfjlk asdflkjdsa jflkdsajflkj dsafjdsajflksajd;lkfjsad;jflkdsajflk;saj;lkfjsad fjdsajf;lkdsaj;lkfjsafj;ldsajf;lkdsajf;lksajd;fj");
 
         NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setContent(contentView)
                 .setCustomBigContentView(contentViewBig)
                 .setContentIntent(pendingIntent);
