@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="64dp"
@@ -9,28 +9,17 @@
         android:src="@mipmap/ic_launcher"
         android:id="@+id/image"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
+        android:layout_height="match_parent"
         android:layout_marginRight="10dp" />
     <TextView
         android:textSize="13dp"
         android:textColor="#000"
-        android:text="Testing"
+        android:text="Testing asdasdas ad asdaskdlad akdjasdlka dalkdakdlj asdlasdaksdlas dlj asdlajaskdl adasdklad asldaksjdalkdjaskld ass"
         android:id="@+id/title"
+        android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image"
-        />
-    <TextView
-        android:textSize="13dp"
-        android:textColor="#000"
-        android:text="Testing is awecome"
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image"
-        android:layout_below="@id/title"
+        android:layout_height="match_parent"
         />
 
-</RelativeLayout>
+</LinearLayout>
 

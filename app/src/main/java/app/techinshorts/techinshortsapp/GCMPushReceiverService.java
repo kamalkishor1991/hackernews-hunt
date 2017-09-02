@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
@@ -27,6 +26,8 @@ import java.util.Random;
 import app.techinshorts.techinshortsapp.utils.PrefUtils;
 import app.techinshorts.techinshortsapp.utils.Utility;
 
+import static android.app.Notification.VISIBILITY_PUBLIC;
+
 public class GCMPushReceiverService extends GcmListenerService {
 
     //This method will be called on every new message received
@@ -35,14 +36,13 @@ public class GCMPushReceiverService extends GcmListenerService {
         //Getting the message from the bundle
         String type = data.getString("type");
         String message = data.getString("message");
-        String summary = data.getString("summary");
         String imgURL = data.getString("image_url");
         switch (type)  {
             case "update":
                 updateNews();
                 break;
             case "notification":
-                sendNotification(message, summary, imgURL);
+                sendNotification(message, imgURL);
                 break;
         }
     }
@@ -62,7 +62,7 @@ public class GCMPushReceiverService extends GcmListenerService {
         });
     }
     //This method is generating a notification_small and displaying the notification_small
-    private void sendNotification(String message, String summary, String imageURL) {
+    private void sendNotification(String message, String imageURL) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         int requestCode = 0;
@@ -83,17 +83,14 @@ public class GCMPushReceiverService extends GcmListenerService {
         bigTextStyle.bigText(summary);*/
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notification_small);
         contentView.setImageViewResource(R.id.image, R.mipmap.ic_launcher);
-        contentView.setTextViewText(R.id.title, "Custom notification_small");
-        contentView.setTextViewText(R.id.text, "This is a custom layout");
+        contentView.setTextViewText(R.id.title, message);
 
         RemoteViews contentViewBig = new RemoteViews(getPackageName(), R.layout.notification_big);
-        contentViewBig.setImageViewResource(R.id.image, R.mipmap.ic_launcher);
-        contentViewBig.setTextViewText(R.id.title, "Custom notification_big");
-        contentViewBig.setTextViewText(R.id.text, "This is a custom layout...................");
-        contentViewBig.setTextColor(R.id.text, Color.BLACK);
+        contentViewBig.setTextViewText(R.id.text_big, message);
         try {
             remote_picture = BitmapFactory.decodeStream(
                     (InputStream) new URL(imageURL).getContent());
+
             //remote_picture = Bitmap.createScaledBitmap(remote_picture, 400, 200, false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -103,6 +100,7 @@ public class GCMPushReceiverService extends GcmListenerService {
 
         NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_name)
+                .setVisibility(VISIBILITY_PUBLIC)
                 .setContent(contentView)
                 .setCustomBigContentView(contentViewBig)
                 .setContentIntent(pendingIntent);
