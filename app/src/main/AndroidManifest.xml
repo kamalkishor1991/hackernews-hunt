@@ -38,23 +38,19 @@
 			</intent-filter>
 		</receiver>
 
-		<!--
-            GCM Receiver Service
-        -->
-		<service android:name="com.hnhunt.hnhunt.GCMPushReceiverService" android:exported="false">
+		<service
+			android:name=".FCMTokenRefreshListenerService">
 			<intent-filter>
-				<action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+				<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+			</intent-filter>
+		</service>
+		<service
+			android:name=".FCMPushReceiverService">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 			</intent-filter>
 		</service>
 
-		<!--
-            GCM Registration Intent Service
-        -->
-		<service android:name="com.hnhunt.hnhunt.GCMRegistrationIntentService" android:exported="false">
-			<intent-filter>
-				<action android:name="com.google.android.gms.iid.InstanceID"/>
-			</intent-filter>
-		</service>
 
 	</application>
 	<uses-permission android:name="android.permission.INTERNET" />
