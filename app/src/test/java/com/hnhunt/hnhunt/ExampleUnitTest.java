@@ -1,4 +1,4 @@
-package app.techinshorts.techinshortsapp;
+package com.hnhunt.hnhunt;
 
 import org.junit.Test;
 

@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <app.techinshorts.techinshortsapp.VerticalViewPager android:id="@+id/verticleViewPager"
+    <com.hnhunt.hnhunt.VerticalViewPager
+        android:id="@+id/verticleViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.v4.widget.SwipeRefreshLayout>

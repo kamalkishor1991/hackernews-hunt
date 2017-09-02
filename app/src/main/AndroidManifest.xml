@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="app.techinshorts.techinshortsapp">
+          package="com.hnhunt.hnhunt">
 
 	<application
 			android:allowBackup="true"
@@ -9,14 +9,14 @@
 			android:supportsRtl="true"
 			android:theme="@style/AppTheme">
 		<activity
-				android:name=".MainActivity"
+				android:name="com.hnhunt.hnhunt.MainActivity"
 				android:label="@string/app_name"
 				android:screenOrientation="portrait"
 				android:theme="@style/AppTheme.NoActionBar">
 
 		</activity>
 		<activity
-			android:name=".SplashActivity"
+			android:name="com.hnhunt.hnhunt.SplashActivity"
 			android:theme="@style/SplashTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -41,7 +41,7 @@
 		<!--
             GCM Receiver Service
         -->
-		<service android:name=".GCMPushReceiverService" android:exported="false">
+		<service android:name="com.hnhunt.hnhunt.GCMPushReceiverService" android:exported="false">
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE"/>
 			</intent-filter>
@@ -50,7 +50,7 @@
 		<!--
             GCM Registration Intent Service
         -->
-		<service android:name=".GCMRegistrationIntentService" android:exported="false">
+		<service android:name="com.hnhunt.hnhunt.GCMRegistrationIntentService" android:exported="false">
 			<intent-filter>
 				<action android:name="com.google.android.gms.iid.InstanceID"/>
 			</intent-filter>

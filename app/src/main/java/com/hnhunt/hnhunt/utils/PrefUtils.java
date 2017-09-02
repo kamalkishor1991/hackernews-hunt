@@ -1,4 +1,4 @@
-package app.techinshorts.techinshortsapp.utils;
+package com.hnhunt.hnhunt.utils;
 
 /**
  * Created by sp on 25/8/17.

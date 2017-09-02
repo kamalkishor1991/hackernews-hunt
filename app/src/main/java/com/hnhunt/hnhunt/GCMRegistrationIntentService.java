@@ -1,4 +1,4 @@
-package app.techinshorts.techinshortsapp;
+package com.hnhunt.hnhunt;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import app.techinshorts.techinshortsapp.utils.Utility;
+import com.hnhunt.hnhunt.utils.Utility;
 import cz.msebera.android.httpclient.Header;
 
 

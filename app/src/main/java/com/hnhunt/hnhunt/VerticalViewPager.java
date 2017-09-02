@@ -1,4 +1,4 @@
-package app.techinshorts.techinshortsapp;
+package com.hnhunt.hnhunt;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

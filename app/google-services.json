@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:926268486679:android:a23640dacacafa2c",
         "android_client_info": {
-          "package_name": "app.techinshorts.techinshortsapp"
+          "package_name": "com.hnhunt.hnhunt"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "926268486679-3v8knvkceetub03gjt5gudena6g9p58c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "app.techinshorts.techinshortsapp",
+            "package_name": "com.hnhunt.hnhunt",
             "certificate_hash": "6b6e055d6037a645d73931deac25bbad536b8db5"
           }
         },

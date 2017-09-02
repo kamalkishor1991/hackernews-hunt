@@ -1,4 +1,4 @@
-package app.techinshorts.techinshortsapp;
+package com.hnhunt.hnhunt;
 
 
 import android.os.Bundle;
@@ -18,8 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import app.techinshorts.techinshortsapp.utils.PrefUtils;
-import app.techinshorts.techinshortsapp.utils.Utility;
+import com.hnhunt.hnhunt.utils.PrefUtils;
+import com.hnhunt.hnhunt.utils.Utility;
 
 public class BriefNews extends Fragment {
 

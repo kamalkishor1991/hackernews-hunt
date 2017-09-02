@@ -7,7 +7,7 @@
 		android:layout_height="match_parent"
         android:background="#000"
 		android:fitsSystemWindows="true"
-		tools:context="app.techinshorts.techinshortsapp.MainActivity">
+		tools:context="com.hnhunt.hnhunt.MainActivity">
 	<android.support.design.widget.AppBarLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

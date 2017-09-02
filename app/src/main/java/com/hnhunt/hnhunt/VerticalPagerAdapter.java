@@ -1,11 +1,7 @@
-package app.techinshorts.techinshortsapp;
+package com.hnhunt.hnhunt;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -16,15 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.firebase.crash.FirebaseCrash;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -35,8 +28,8 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.util.Date;
 
-import app.techinshorts.techinshortsapp.utils.PrefUtils;
-import app.techinshorts.techinshortsapp.utils.Utility;
+import com.hnhunt.hnhunt.utils.PrefUtils;
+import com.hnhunt.hnhunt.utils.Utility;
 import cz.msebera.android.httpclient.Header;
 
 

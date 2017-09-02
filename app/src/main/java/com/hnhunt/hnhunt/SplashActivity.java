@@ -1,4 +1,4 @@
-package app.techinshorts.techinshortsapp;
+package com.hnhunt.hnhunt;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -17,8 +17,8 @@ import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
 
-import app.techinshorts.techinshortsapp.utils.PrefUtils;
-import app.techinshorts.techinshortsapp.utils.Utility;
+import com.hnhunt.hnhunt.utils.PrefUtils;
+import com.hnhunt.hnhunt.utils.Utility;
 
 public class SplashActivity extends AppCompatActivity {
     //Creating a broadcast receiver for gcm registration

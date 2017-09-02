@@ -1,4 +1,4 @@
-package app.techinshorts.techinshortsapp;
+package com.hnhunt.hnhunt;
 
 
 import android.app.NotificationManager;
@@ -23,8 +23,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Random;
 
-import app.techinshorts.techinshortsapp.utils.PrefUtils;
-import app.techinshorts.techinshortsapp.utils.Utility;
+import com.hnhunt.hnhunt.utils.PrefUtils;
+import com.hnhunt.hnhunt.utils.Utility;
 
 import static android.app.Notification.VISIBILITY_PUBLIC;
 
