@@ -24,6 +24,7 @@ import java.util.Date;
 
 public class Utility {
     public static final String BASE_URL = "http://hnhunt.com";
+
     public static String fetchApi(String... args) {
         String url = BASE_URL + "/news.json";
         StringBuilder params = new StringBuilder();
