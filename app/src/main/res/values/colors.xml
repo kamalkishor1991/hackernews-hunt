@@ -13,4 +13,5 @@
 	<color name="grey_font">#ff9e9e9e</color>
 	<color name="text_shadow">#bc000000</color>
 	<color name="text_shadow_white">#FFFFFF</color>
+	<color name="transparent">#00ffffff</color>
 </resources>

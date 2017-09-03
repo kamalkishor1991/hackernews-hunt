@@ -1,6 +1,8 @@
 package com.hnhunt.hnhunt;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,6 +87,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
         return view == (object);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
@@ -100,7 +104,18 @@ public class VerticalPagerAdapter extends PagerAdapter {
             text.setSpan(new RelativeSizeSpan(0.75f), title.length(), title.length() + host.length() + 1, 0); // set size
             ((TextView)(itemView.findViewById(R.id.title))).setText(text);
 
-            Picasso.with(mContext).load(obj.getString("top_image")).placeholder(R.drawable.background_default).into((ImageView)itemView.findViewById(R.id.profileImageView));
+            Picasso.with(mContext).load(obj.getString("top_image"))
+                    .placeholder(R.drawable.background_default)
+                    .fit()
+                    .centerInside()
+                    .into((ImageView)itemView.findViewById(R.id.profileImageView));
+
+            Picasso.with(mContext).load(obj.getString("top_image"))
+                    .placeholder(R.drawable.background_default)
+                    .resize(7,7)
+                    .centerInside()
+                    .into((ImageView)itemView.findViewById(R.id.profileBK));
+
             TextView comments = (TextView) itemView.findViewById(R.id.comments);
             TextView points = (TextView) itemView.findViewById(R.id.points);
             setCommentAndPoints(comments, points, obj.getString("comment_count") , obj.getString("score") );
