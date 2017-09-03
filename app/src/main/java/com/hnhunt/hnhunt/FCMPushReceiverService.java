@@ -21,22 +21,27 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
 import java.util.Random;
 
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.hnhunt.hnhunt.utils.PrefUtils;
 import com.hnhunt.hnhunt.utils.Utility;
 
 import static android.app.Notification.VISIBILITY_PUBLIC;
 
-public class GCMPushReceiverService extends GcmListenerService {
+public class FCMPushReceiverService extends FirebaseMessagingService {
 
     //This method will be called on every new message received
     @Override
-    public void onMessageReceived(String from, Bundle data) {
+    public void onMessageReceived(RemoteMessage remoteMessage) {
         //Getting the message from the bundle
-        String type = data.getString("type");
-        String message = data.getString("message");
-        String imgURL = data.getString("image_url");
+
+        Map<String, String> data = remoteMessage.getData();
+        String type = data.get("type");
+        String message = data.get("message");
+        String imgURL = data.get("image_url");
         switch (type)  {
             case "update":
                 updateNews();

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "926268486679",
-    "firebase_url": "https://techinshorts-71fbf.firebaseio.com",
-    "project_id": "techinshorts-71fbf",
-    "storage_bucket": "techinshorts-71fbf.appspot.com"
+    "project_number": "195304253019",
+    "firebase_url": "https://hnhunt-74e05.firebaseio.com",
+    "project_id": "hnhunt-74e05",
+    "storage_bucket": "hnhunt-74e05.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:926268486679:android:a23640dacacafa2c",
+        "mobilesdk_app_id": "1:195304253019:android:ad01823ea9253c62",
         "android_client_info": {
           "package_name": "com.hnhunt.hnhunt"
         }
       },
       "oauth_client": [
         {
-          "client_id": "926268486679-3v8knvkceetub03gjt5gudena6g9p58c.apps.googleusercontent.com",
+          "client_id": "195304253019-15c7pham1qj2t8f8m06ohbulguk80jfe.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hnhunt.hnhunt",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "926268486679-8vftmppmv57mkh4ajko3u6hgh1378imu.apps.googleusercontent.com",
+          "client_id": "195304253019-5u88avt7p35q3iluitho2qpa30m65soh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC9BWdtr0kRxR69NSwVvMrdmInwkYIb3Bs"
+          "current_key": "AIzaSyAe4oxyH8evFjisqcRLz4xyZ50iwkUkVlw"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "926268486679-8vftmppmv57mkh4ajko3u6hgh1378imu.apps.googleusercontent.com",
+              "client_id": "195304253019-5u88avt7p35q3iluitho2qpa30m65soh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
