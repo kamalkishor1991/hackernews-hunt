@@ -52,6 +52,10 @@ public class PrefUtils {
         }
     }
 
+    public static void removeTopNews(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().remove(TOP_NEWS).apply();
+    }
+
     public static void setFirstRun(Context context) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(FIRST_RUN, false).apply();
     }

@@ -49,6 +49,9 @@ public class FCMPushReceiverService extends FirebaseMessagingService {
             case "notification":
                 sendNotification(message, imgURL);
                 break;
+            case "clear_cache":
+                PrefUtils.removeTopNews(getApplicationContext());
+                break;
         }
     }
 
