@@ -27,7 +27,7 @@ public class PrefUtils {
         JSONArray existing =  getTopNews(context);
         JSONArray newList = new JSONArray();
         try {
-            for (int i = 0, j = 0; newList.length() < NEWS_CACHE_SIZE; i++, j++) {
+            for (int i = 0, j = 0; newList.length() < NEWS_CACHE_SIZE;) {
                 if (i < jsonArray.length() && j < existing.length()) {
 
                     if (jsonArray.getJSONObject(i).getInt("id") < existing.getJSONObject(j).getInt("id")) newList.put(existing.getJSONObject(j++));
