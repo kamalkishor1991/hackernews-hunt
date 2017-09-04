@@ -77,57 +77,74 @@
 					android:layout_height="wrap_content"
 					android:textSize="14sp"
 					android:textStyle="normal"/>
+
 			</LinearLayout>
 		</LinearLayout>
 
 
-		<LinearLayout
-			android:layout_gravity="bottom"
-			android:paddingLeft="15dp"
-			android:paddingRight="15dp"
+		<RelativeLayout
 			android:layout_width="match_parent"
-			android:background="@drawable/bottom_pad"
-			android:weightSum="2"
-			android:gravity="center"
-			android:layout_height="50dp">
+			android:layout_height="55dp"
+			android:layout_gravity="bottom">
+
 			<LinearLayout
-				android:layout_weight="1"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
+				android:paddingLeft="15dp"
+				android:id="@+id/card_footer"
+				android:layout_below="@+id/sum_info"
+				android:paddingRight="15dp"
+				android:layout_width="match_parent"
+				android:background="@drawable/bottom_pad"
+				android:weightSum="2"
+				android:gravity="center"
+				android:layout_height="50dp">
+				<LinearLayout
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+
+					<TextView
+						android:id="@+id/points"
+						android:text="21 points"
+						android:textSize="10dp"
+						android:textColor="#fff"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" />
+					<TextView
+						android:layout_width="wrap_content"
+						android:text="  |  "
+						android:textSize="10dp"
+						android:textColor="#fff"
+						android:layout_height="wrap_content" />
+					<TextView
+						android:id="@+id/comments"
+						android:text="21 comments"
+						android:textSize="10dp"
+						android:textColor="#fff"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" />
+
+				</LinearLayout>
 
 				<TextView
-					android:id="@+id/points"
-					android:text="21 points"
-					android:textSize="10dp"
-					android:textColor="#fff"
+					android:id="@+id/time"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content" />
-				<TextView
-					android:layout_width="wrap_content"
-					android:text="  |  "
-					android:textSize="10dp"
-					android:textColor="#fff"
-					android:layout_height="wrap_content" />
-				<TextView
-					android:id="@+id/comments"
-					android:text="21 comments"
-					android:textSize="10dp"
-					android:textColor="#fff"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content" />
+					android:gravity="right"
+					android:layout_height="wrap_content"
+					android:text="Published: 10 min ago"
+					android:textColor="#FFF"
+					android:textSize="10dp" />
 
 			</LinearLayout>
-
 			<TextView
-				android:id="@+id/time"
-				android:layout_weight="1"
-				android:layout_width="wrap_content"
-				android:gravity="right"
-				android:layout_height="wrap_content"
-				android:text="Published: 10 min ago"
-				android:textColor="#FFF"
-				android:textSize="10dp" />
+				android:layout_width="match_parent"
+				android:id="@+id/sum_info"
+				android:textStyle="italic"
+				android:textSize="10dp"
+				android:gravity="center_horizontal"
+				android:text="This is an auto generated summary - swipe right for actual story"
+				android:layout_height="wrap_content" />
 
-		</LinearLayout>
+		</RelativeLayout>
 	</android.support.v7.widget.CardView>
 </RelativeLayout>
