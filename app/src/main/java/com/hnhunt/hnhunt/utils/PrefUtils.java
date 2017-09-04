@@ -14,6 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class PrefUtils {
     private static final String TOP_NEWS = "top_news";
     private static final String FIRST_RUN = "first_run";
@@ -24,17 +27,16 @@ public class PrefUtils {
         JSONArray existing =  getTopNews(context);
         JSONArray newList = new JSONArray();
         try {
+            for (int i = 0, j = 0; newList.length() < NEWS_CACHE_SIZE; i++, j++) {
+                if (i < jsonArray.length() && j < existing.length()) {
 
-            int top = existing.length() <= 0 ? -1 : existing.getJSONObject(0).getInt("id");
-            for (int i = 0; i < jsonArray.length() && newList.length() < NEWS_CACHE_SIZE; i++) {
-                JSONObject obj = jsonArray.getJSONObject(i);
-                if (obj.getInt("id") > top) {
-                    newList.put(obj);
+                    if (jsonArray.getJSONObject(i).getInt("id") < existing.getJSONObject(j).getInt("id")) newList.put(existing.getJSONObject(j++));
+                    else newList.put(jsonArray.getJSONObject(i++));
+
                 }
-            }
-            for (int i = 0; i < existing.length() && newList.length() < NEWS_CACHE_SIZE; i++) {
-                JSONObject obj = existing.getJSONObject(i);
-                newList.put(obj);
+                else if (i < jsonArray.length()) newList.put(jsonArray.getJSONObject(i++));
+                else if (j < existing.length()) newList.put(existing.getJSONObject(j++));
+                else break;
             }
 
             PreferenceManager.getDefaultSharedPreferences(context).edit().putString(TOP_NEWS, newList.toString()).apply();
