@@ -9,7 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -91,10 +96,22 @@ public class FCMPushReceiverService extends FirebaseMessagingService {
         bigTextStyle.bigText(summary);*/
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notification_small);
         contentView.setImageViewResource(R.id.image, R.mipmap.ic_launcher);
-        contentView.setTextViewText(R.id.title, message);
+
+        final String additionalInfo = "  & more stories...";
+        final SpannableString text = new SpannableString(message + additionalInfo);
+        final SpannableString textSmall = new SpannableString(message + additionalInfo);
+        textSmall.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.grey)), message.length(), message.length() + additionalInfo.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        text.setSpan(new RelativeSizeSpan(0.75f), message.length(), message.length() + additionalInfo.length(), 0); // set size
+        textSmall.setSpan(new RelativeSizeSpan(0.75f), message.length(), message.length() + additionalInfo.length(), 0); // set size
+
+
+        contentView.setTextViewText(R.id.title, textSmall);
 
         RemoteViews contentViewBig = new RemoteViews(getPackageName(), R.layout.notification_big);
-        contentViewBig.setTextViewText(R.id.text_big, message);
+        text.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.white)), message.length(), message.length() + additionalInfo.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        contentViewBig.setTextViewText(R.id.text_big, text);
         try {
             remote_picture = BitmapFactory.decodeStream(
                     (InputStream) new URL(imageURL).getContent());
@@ -103,7 +120,10 @@ public class FCMPushReceiverService extends FirebaseMessagingService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        remote_picture = Bitmap.createScaledBitmap(remote_picture, 390, 230, false);
+        Bitmap compressPicture = Bitmap.createScaledBitmap(remote_picture, 5, 3, false);
         contentViewBig.setImageViewBitmap(R.id.big_picture, remote_picture);
+        contentViewBig.setImageViewBitmap(R.id.big_picture_bg, compressPicture);
         //contentViewBig.setTextViewText(R.id.big_text, "kdasfjlk asdflkjdsa jflkdsajflkj dsafjdsajflksajd;lkfjsad;jflkdsajflk;saj;lkfjsad fjdsajf;lkdsaj;lkfjsafj;ldsajf;lkdsajf;lksajd;fj");
 
         NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this)

@@ -6,9 +6,16 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/big_picture_bg"
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_launcher"
+        android:layout_height="match_parent" />
+
+    <ImageView
         android:id="@+id/big_picture"
         android:layout_width="match_parent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher"
         android:layout_height="match_parent" />
     <TextView
@@ -30,6 +37,7 @@
         android:shadowColor="@color/text_shadow"
         android:shadowDx="0"
         android:shadowDy="0"
+        android:paddingBottom="2dp"
         android:shadowRadius="5"
         />
 
