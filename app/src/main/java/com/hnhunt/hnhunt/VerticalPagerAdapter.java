@@ -1,6 +1,7 @@
 package com.hnhunt.hnhunt;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
@@ -10,9 +11,11 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,8 +96,9 @@ public class VerticalPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
         try {
             JSONObject obj = data.getJSONObject(position);
-            String title = obj.getString("title");
-            String host = "(" + new URL(obj.getString("url")).getHost() + ")";
+            final String title = obj.getString("title");
+            final String url = obj.getString("url");
+            String host = "(" + new URL(url).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
             ((TextView)(itemView.findViewById(R.id.summary))).setText(obj.getString("summary"));
 
@@ -121,6 +125,23 @@ public class VerticalPagerAdapter extends PagerAdapter {
             setCommentAndPoints(comments, points, obj.getString("comment_count") , obj.getString("score") );
             ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
             updateCommentsAndPoints(obj.getLong("hn_id"), comments, points);
+            ImageButton imageButton = (ImageButton) itemView.findViewById(R.id.share);
+            imageButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Intent share = new Intent(android.content.Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+
+                    // Add data to the intent, the receiving app will decide
+                    // what to do with it.
+                    share.putExtra(Intent.EXTRA_SUBJECT, title);
+                    share.putExtra(Intent.EXTRA_TEXT, url);
+
+                    mContext.startActivity(Intent.createChooser(share, "Share this item!"));
+                    return false;
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
