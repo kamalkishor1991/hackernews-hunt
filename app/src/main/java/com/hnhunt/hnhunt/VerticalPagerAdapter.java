@@ -3,6 +3,7 @@ package com.hnhunt.hnhunt;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.text.Spannable;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -98,6 +100,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             JSONObject obj = data.getJSONObject(position);
             final String title = obj.getString("title");
             final String url = obj.getString("url");
+            final long hn_id = obj.getLong("hn_id");
             String host = "(" + new URL(url).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
             ((TextView)(itemView.findViewById(R.id.summary))).setText(obj.getString("summary"));
@@ -124,7 +127,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             TextView points = (TextView) itemView.findViewById(R.id.points);
             setCommentAndPoints(comments, points, obj.getString("comment_count") , obj.getString("score") );
             ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
-            updateCommentsAndPoints(obj.getLong("hn_id"), comments, points);
+            updateCommentsAndPoints(hn_id, comments, points);
             ImageButton imageButton = (ImageButton) itemView.findViewById(R.id.share);
             imageButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -139,6 +142,10 @@ public class VerticalPagerAdapter extends PagerAdapter {
                     share.putExtra(Intent.EXTRA_TEXT, url);
 
                     mContext.startActivity(Intent.createChooser(share, "Share this item!"));
+                    Bundle hnShare = new Bundle();
+                    hnShare.putLong("hn_id", hn_id);
+                    hnShare.putString("title", title);
+                    FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
                     return false;
                 }
             });

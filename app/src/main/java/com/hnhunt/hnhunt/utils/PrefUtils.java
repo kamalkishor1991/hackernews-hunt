@@ -1,9 +1,5 @@
 package com.hnhunt.hnhunt.utils;
 
-/**
- * Created by sp on 25/8/17.
- */
-
 
 import android.content.Context;
 import android.preference.PreferenceManager;
