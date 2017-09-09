@@ -107,6 +107,20 @@
 					android:layout_height="wrap_content"
 					android:textSize="14sp"
 					android:textStyle="normal"/>
+				<TextView
+					android:id="@+id/missing"
+					android:textColor="#a4a4a4"
+					android:lineSpacingExtra="2dp"
+					android:text="/**\n
+ * Failed to extract summary.\n
+ * Swipe right for the actual story.\n
+ */"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="13sp"
+					android:layout_marginTop="20dp"
+					android:layout_marginLeft="20dp"
+					android:textStyle="italic"/>
 
 			</LinearLayout>
 		</LinearLayout>
@@ -172,7 +186,7 @@
 				android:textStyle="italic"
 				android:textSize="10dp"
 				android:gravity="center_horizontal"
-				android:text="This is an auto generated summary - swipe right for actual story"
+				android:text="This is an auto generated summary - swipe right for the actual story"
 				android:layout_height="wrap_content" />
 
 		</RelativeLayout>
