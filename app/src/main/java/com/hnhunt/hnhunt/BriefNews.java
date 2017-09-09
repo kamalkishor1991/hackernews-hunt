@@ -68,7 +68,6 @@ public class BriefNews extends Fragment {
                 Utility.fetchNews(container.getContext(), null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        PrefUtils.saveTopNews(container.getContext(), response);
                         adapter.resetNewData(response);
                         swipeView.setRefreshing(false);
 

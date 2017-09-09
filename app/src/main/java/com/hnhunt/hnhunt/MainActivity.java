@@ -13,8 +13,14 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
+import com.hnhunt.hnhunt.utils.LatestNews;
+import com.hnhunt.hnhunt.utils.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,9 +52,23 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
         }
 
+        if (LatestNews.getInstance().getData().length() == 0) {
+            Utility.fetchSingleNews(getApplicationContext(), getIntent().getStringExtra("id"), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    LatestNews.getInstance().addSingleObj(response);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+                    viewPager = (ViewPager) findViewById(R.id.viewpager);
+                    setupViewPager(viewPager);
+                }
+
+            });
+        }
+        else {
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            setupViewPager(viewPager);
+        }
+
 
   }
 

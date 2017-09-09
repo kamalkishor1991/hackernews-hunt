@@ -5,25 +5,30 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.Date;
 
 
 public class Utility {
-    public static final String BASE_URL = "http://hnhunt.com";
+    public static final String BASE_URL = "http://192.168.0.105:3000";
 
     public static String fetchApi(String... args) {
         String url = BASE_URL + "/news.json";
@@ -38,7 +43,7 @@ public class Utility {
         return url;
     }
 
-    public static void fetchNews(final Context context, String offset, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+    public static void fetchNews(final Context context, String page, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
 
 
         // Instantiate the cache
@@ -55,8 +60,36 @@ public class Utility {
         mRequestQueue.start();
 
         JsonArrayRequest jsObjRequest = new JsonArrayRequest
-                (Request.Method.GET, Utility.fetchApi("offset", offset), null, successListener, errorListener);
-        jsObjRequest.setShouldCache(true);
+                (Request.Method.GET, Utility.fetchApi("page", page), null, successListener, errorListener);
+        mRequestQueue.add(jsObjRequest);
+    }
+
+    public static void fetchSingleNews(final Context context, String newsId, Response.Listener<JSONObject> successListener) {
+
+
+        // Instantiate the cache
+        Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024); // 1MB cap
+
+// Set up the network to use HttpURLConnection as the HTTP client.
+        Network network = new BasicNetwork(new HurlStack());
+
+// Instantiate the RequestQueue with the cache and network.
+
+        RequestQueue mRequestQueue = new RequestQueue(cache, network);
+
+// Start the queue
+        mRequestQueue.start();
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, BASE_URL + "/news/" + newsId + ".json", null, successListener, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(context, "Network Problem", Toast.LENGTH_SHORT).show();
+
+
+                    }
+                });
         mRequestQueue.add(jsObjRequest);
     }
 

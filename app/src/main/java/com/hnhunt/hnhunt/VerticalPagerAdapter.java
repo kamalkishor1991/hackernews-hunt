@@ -8,17 +8,16 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.firebase.crash.FirebaseCrash;
+import com.hnhunt.hnhunt.utils.LatestNews;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -38,48 +37,49 @@ import cz.msebera.android.httpclient.Header;
 
 public class VerticalPagerAdapter extends PagerAdapter {
 
-    private JSONArray data;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    public static int THRESHOLD = 4;
+    public static int THRESHOLD = 6;
     public VerticalPagerAdapter(Context context) {
         mContext = context;
-        data = PrefUtils.getTopNews(context);
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (LatestNews.getInstance().getData().length() <= 1) {
+            Utility.fetchNews(context, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    addData(response);
+                    notifyDataSetChanged();
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+        }
     }
 
     @Override
     public int getCount() {
-        return data.length();
+        return LatestNews.getInstance().getData().length();
     }
 
     public void addData(JSONArray list) {
-        for (int i = 0; i < list.length(); i++) {
-            try {
-                if (data.length() == 0 || data.getJSONObject(data.length() - 1).getInt("id") > list.getJSONObject(i).getInt("id"))
-                    data.put(list.getJSONObject(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        try {
+            LatestNews.getInstance().addData(list);
+            notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        notifyDataSetChanged();
     }
     public JSONArray getData() {
-        return data;
+        return LatestNews.getInstance().getData();
     }
 
     public void resetNewData(JSONArray newData) {
-        try {
-
-            if (newData.getJSONObject(0).getInt("id") > data.getJSONObject(0).getInt("id")) {
-                data = newData;
-                notifyDataSetChanged();
-            }
-
-        } catch (JSONException e) {
-
-            FirebaseCrash.log("exception while getting data: " + e);
-        }
+        LatestNews.getInstance().resetData(newData);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
         try {
-            JSONObject obj = data.getJSONObject(position);
+            JSONObject obj = LatestNews.getInstance().getData().getJSONObject(position);
             String title = obj.getString("title");
             String host = "(" + new URL(obj.getString("url")).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
@@ -126,12 +126,24 @@ public class VerticalPagerAdapter extends PagerAdapter {
         }
 
         container.addView(itemView);
-        if (position + THRESHOLD == data.length()) {
-            try {
-                loadData(container.getContext(), false, true, data.getJSONObject(data.length() - 1).getString("id"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if (position + THRESHOLD == LatestNews.getInstance().getData().length()) {
+            Utility.fetchNews(mContext, "" + LatestNews.getInstance().getIncPage(), new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        LatestNews.getInstance().addData(response);
+                        notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
         }
 
 
@@ -165,29 +177,6 @@ public class VerticalPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
-    }
-    private void loadData(final Context context, final boolean cacheAdd, final boolean memoryAdd, String offset) {
-        Utility.fetchNews(mContext, offset, new Response.Listener<JSONArray>() {
-
-                    @Override
-                    public void onResponse(JSONArray response) {
-
-                        if (cacheAdd)
-                        PrefUtils.saveTopNews(context, response);
-                        if (data.length() == 0 || memoryAdd)
-                            addData(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Log.d("VolleyError ", error.toString());
-                        // TODO Auto-generated method stub
-
-                    }
-                });
     }
 
     @Override

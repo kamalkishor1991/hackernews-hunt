@@ -47,12 +47,10 @@ public class FCMPushReceiverService extends FirebaseMessagingService {
         String type = data.get("type");
         String message = data.get("message");
         String imgURL = data.get("image_url");
+        String id = data.get("id");
         switch (type)  {
-            case "update":
-                updateNews();
-                break;
             case "notification":
-                sendNotification(message, imgURL);
+                sendNotification(message, imgURL, id);
                 break;
             case "clear_cache":
                 PrefUtils.removeTopNews(getApplicationContext());
@@ -60,24 +58,11 @@ public class FCMPushReceiverService extends FirebaseMessagingService {
         }
     }
 
-    private void updateNews() {
-        Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                PrefUtils.saveTopNews(getApplicationContext(), response);
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                FirebaseCrash.log("VolleyError: " + error);
-            }
-        });
-    }
     //This method is generating a notification_small and displaying the notification_small
-    private void sendNotification(String message, String imageURL) {
+    private void sendNotification(String message, String imageURL, String id) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("id", id);
         int requestCode = 0;
         PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
        // Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -130,6 +115,7 @@ public class FCMPushReceiverService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setVisibility(VISIBILITY_PUBLIC)
                 .setContent(contentView)
+                .setAutoCancel(true)
                 .setCustomBigContentView(contentViewBig)
                 .setContentIntent(pendingIntent);
 // Add the big picture to the style.
