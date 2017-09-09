@@ -109,7 +109,16 @@ public class VerticalPagerAdapter extends PagerAdapter {
             final long hn_id = obj.getLong("hn_id");
             String host = "(" + new URL(url).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
-            ((TextView)(itemView.findViewById(R.id.summary))).setText(obj.getString("summary"));
+            String summary = obj.getString("summary");
+            if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
+                itemView.findViewById(R.id.summary).setVisibility(View.GONE);
+                itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
+            }
+            else {
+                itemView.findViewById(R.id.summary).setVisibility(View.VISIBLE);
+                itemView.findViewById(R.id.missing).setVisibility(View.GONE);
+                ((TextView) (itemView.findViewById(R.id.summary))).setText(summary);
+            }
 
             final SpannableString text = new SpannableString(title + " " + host);
             text.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.grey)), title.length(), title.length() + host.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
