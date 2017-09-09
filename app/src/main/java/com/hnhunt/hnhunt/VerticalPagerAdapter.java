@@ -110,14 +110,14 @@ public class VerticalPagerAdapter extends PagerAdapter {
             String host = "(" + new URL(url).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
             String summary = obj.getString("summary");
-            if (summary == null || summary.length() < 10) {
+            if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
                 itemView.findViewById(R.id.summary).setVisibility(View.GONE);
                 itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
             }
             else {
                 itemView.findViewById(R.id.summary).setVisibility(View.VISIBLE);
                 itemView.findViewById(R.id.missing).setVisibility(View.GONE);
-                ((TextView) (itemView.findViewById(R.id.summary))).setText(obj.getString("summary"));
+                ((TextView) (itemView.findViewById(R.id.summary))).setText(summary);
             }
 
             final SpannableString text = new SpannableString(title + " " + host);
