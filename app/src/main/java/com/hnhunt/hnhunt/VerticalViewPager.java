@@ -6,9 +6,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by sp on 21/8/17.
- */
 public class VerticalViewPager extends ViewPager {
 
     public VerticalViewPager(Context context) {

@@ -1,7 +1,9 @@
 package com.hnhunt.hnhunt;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.text.Spannable;
@@ -9,13 +11,16 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhunt.utils.LatestNews;
 import com.loopj.android.http.AsyncHttpClient;
@@ -93,8 +98,10 @@ public class VerticalPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
         try {
             JSONObject obj = LatestNews.getInstance().getData().getJSONObject(position);
-            String title = obj.getString("title");
-            String host = "(" + new URL(obj.getString("url")).getHost() + ")";
+            final String title = obj.getString("title");
+            final String url = obj.getString("url");
+            final long hn_id = obj.getLong("hn_id");
+            String host = "(" + new URL(url).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
             ((TextView)(itemView.findViewById(R.id.summary))).setText(obj.getString("summary"));
 
@@ -120,7 +127,28 @@ public class VerticalPagerAdapter extends PagerAdapter {
             TextView points = (TextView) itemView.findViewById(R.id.points);
             setCommentAndPoints(comments, points, obj.getString("comment_count") , obj.getString("score") );
             ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
-            updateCommentsAndPoints(obj.getLong("hn_id"), comments, points);
+            updateCommentsAndPoints(hn_id, comments, points);
+            ImageButton imageButton = (ImageButton) itemView.findViewById(R.id.share);
+            imageButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Intent share = new Intent(android.content.Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+
+                    // Add data to the intent, the receiving app will decide
+                    // what to do with it.
+                    share.putExtra(Intent.EXTRA_SUBJECT, title);
+                    share.putExtra(Intent.EXTRA_TEXT, url);
+
+                    mContext.startActivity(Intent.createChooser(share, "Share this item!"));
+                    Bundle hnShare = new Bundle();
+                    hnShare.putLong("hn_id", hn_id);
+                    hnShare.putString("title", title);
+                    FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
+                    return false;
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
