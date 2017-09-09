@@ -2,6 +2,11 @@ package com.hnhunt.hnhunt;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -32,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 
@@ -129,7 +135,21 @@ public class VerticalPagerAdapter extends PagerAdapter {
             ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
             updateCommentsAndPoints(hn_id, comments, points);
             ImageButton imageButton = (ImageButton) itemView.findViewById(R.id.share);
-            imageButton.setOnTouchListener(new View.OnTouchListener() {
+            Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);
+
+            BlurMaskFilter blurFilter = new BlurMaskFilter(10, BlurMaskFilter.Blur.NORMAL);
+            Paint shadowPaint = new Paint();
+            shadowPaint.setMaskFilter(blurFilter);
+
+            int[] offsetXY = new int[2];
+            Bitmap shadowImage = originalBitmap.extractAlpha(shadowPaint, offsetXY);
+
+
+            imageButton.setImageBitmap(shadowImage);
+
+
+
+            ((ImageButton) itemView.findViewById(R.id.share_bg)).setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     Intent share = new Intent(android.content.Intent.ACTION_SEND);
