@@ -102,8 +102,10 @@
 					android:fontFamily="sans-serif-light"
 					android:textColor="#121212"
 					android:lineSpacingExtra="5dp"
-					android:text="This is a long news description, lorepsum of somthing blah blah blah lorepsum of somthing blah blah blah lorepsum of somthing blah blah blah lorepsum of somthing blah blah blah"
+					android:text="Computer science is the study of the theory, experimentation, and engineering that form the basis for the design and use of computers. It is the scientific and practical approach to computation and its applications and the systematic study of the feasibility, structure, expression, and mechanization of the methodical procedures (or algorithms) that underlie the acquisition, representation, processing, storage, communication of, and access to information. An alternate, more succinct definition of computer science is the study of automating algorithmic processes that scale. A computer scientist specializes in the theory of computation and the design of computational systems.[1]"
 					android:layout_width="wrap_content"
+					android:ellipsize="end"
+					android:maxLines="8"
 					android:layout_height="wrap_content"
 					android:textSize="14sp"
 					android:textStyle="normal"/>

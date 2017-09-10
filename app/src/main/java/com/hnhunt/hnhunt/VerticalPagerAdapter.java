@@ -156,11 +156,9 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
             imageButton.setImageBitmap(shadowImage);
 
-
-
-            ((ImageButton) itemView.findViewById(R.id.share_bg)).setOnTouchListener(new View.OnTouchListener() {
+            ((ImageButton) itemView.findViewById(R.id.share_bg)).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
+                public void onClick(View v) {
                     Intent share = new Intent(android.content.Intent.ACTION_SEND);
                     share.setType("text/plain");
                     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
@@ -175,9 +173,9 @@ public class VerticalPagerAdapter extends PagerAdapter {
                     hnShare.putLong("hn_id", hn_id);
                     hnShare.putString("title", title);
                     FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
-                    return false;
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
