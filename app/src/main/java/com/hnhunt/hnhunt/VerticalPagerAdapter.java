@@ -65,7 +65,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error);
                 }
             });
         }
@@ -196,7 +196,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    FirebaseCrash.log("Network Prob after threshold: " + error);
                 }
             });
         }

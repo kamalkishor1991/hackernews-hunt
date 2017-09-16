@@ -33,6 +33,7 @@ public class SplashActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                FirebaseCrash.log("Network Prob on splash: " + error);
                 Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_SHORT).show();
             }
         });

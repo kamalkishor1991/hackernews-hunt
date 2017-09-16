@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:layout_height="256dp"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
@@ -8,14 +8,17 @@
     <ImageView
         android:id="@+id/big_picture_bg"
         android:layout_width="match_parent"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
+        android:elevation="9dp"
         android:src="@mipmap/ic_launcher"
         android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/big_picture"
         android:layout_width="match_parent"
+        android:elevation="10dp"
         android:scaleType="fitCenter"
+        android:background="@color/transparent"
         android:src="@mipmap/ic_launcher"
         android:layout_height="match_parent" />
     <TextView
@@ -35,6 +38,7 @@
         android:textColor="@color/light_font"
         android:fontFamily="sans-serif-medium"
         android:shadowColor="@color/text_shadow"
+        android:elevation="11dp"
         android:shadowDx="0"
         android:shadowDy="0"
         android:paddingBottom="2dp"

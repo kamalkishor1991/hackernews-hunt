@@ -105,8 +105,8 @@ public class FCMPushReceiverService extends FirebaseMessagingService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        remote_picture = Bitmap.createScaledBitmap(remote_picture, 390, 230, false);
-        Bitmap compressPicture = Bitmap.createScaledBitmap(remote_picture, 5, 3, false);
+        remote_picture = Utility.resizeBitmapFitXY(390, 230, remote_picture);
+        Bitmap compressPicture = Utility.resizeBitmapFitXY(5, 3, remote_picture);
         contentViewBig.setImageViewBitmap(R.id.big_picture, remote_picture);
         contentViewBig.setImageViewBitmap(R.id.big_picture_bg, compressPicture);
         //contentViewBig.setTextViewText(R.id.big_text, "kdasfjlk asdflkjdsa jflkdsajflkj dsafjdsajflksajd;lkfjsad;jflkdsajflk;saj;lkfjsad fjdsajf;lkdsaj;lkfjsafj;ldsajf;lkdsajf;lksajd;fj");

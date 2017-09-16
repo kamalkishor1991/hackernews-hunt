@@ -3,6 +3,8 @@ package com.hnhunt.hnhunt.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -19,6 +21,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -84,7 +87,8 @@ public class Utility {
                 (Request.Method.GET, BASE_URL + "/news/" + newsId + ".json", null, successListener, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+
+                        FirebaseCrash.log("Network Prob on Utility: " + error);
                         Toast.makeText(context, "Network Problem", Toast.LENGTH_SHORT).show();
 
 
@@ -118,5 +122,27 @@ public class Utility {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    public static Bitmap resizeBitmapFitXY(int width, int height, Bitmap bitmap){
+        Bitmap background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        float originalWidth = bitmap.getWidth(), originalHeight = bitmap.getHeight();
+        Canvas canvas = new Canvas(background);
+        float scale, xTranslation = 0.0f, yTranslation = 0.0f;
+        if (originalWidth > originalHeight) {
+            scale = height/originalHeight;
+            xTranslation = (width - originalWidth * scale)/2.0f;
+        }
+        else {
+            scale = width / originalWidth;
+            yTranslation = (height - originalHeight * scale)/2.0f;
+        }
+        Matrix transformation = new Matrix();
+        transformation.postTranslate(xTranslation, yTranslation);
+        transformation.preScale(scale, scale);
+        Paint paint = new Paint();
+        paint.setFilterBitmap(true);
+        canvas.drawBitmap(bitmap, transformation, paint);
+        return background;
     }
 }

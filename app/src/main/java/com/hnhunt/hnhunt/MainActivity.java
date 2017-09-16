@@ -52,20 +52,18 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
         }
 
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (LatestNews.getInstance().getData().length() == 0) {
             Utility.fetchSingleNews(getApplicationContext(), getIntent().getStringExtra("id"), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     LatestNews.getInstance().addSingleObj(response);
-
-                    viewPager = (ViewPager) findViewById(R.id.viewpager);
                     setupViewPager(viewPager);
                 }
 
             });
         }
         else {
-            viewPager = (ViewPager) findViewById(R.id.viewpager);
             setupViewPager(viewPager);
         }
 
