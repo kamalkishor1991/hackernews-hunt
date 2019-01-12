@@ -15,6 +15,8 @@ import android.view.WindowManager;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhunt.utils.LatestNews;
@@ -27,6 +29,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -35,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
   protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
