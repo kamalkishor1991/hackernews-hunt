@@ -92,9 +92,10 @@ public class BriefNews extends Fragment {
         return rootView;
     }
 
-    public JSONObject getCurrentPage() {
+    public HnNews getCurrentPage() {
         //try {
-            return null;
+            return adapter.getHnNews(verticalViewPager.getCurrentItem());
+            //return verticalViewPager.getCurrentItem();
             //return adapter.getData().getJSONObject(verticalViewPager.getCurrentItem());
         //} catch (JSONException e) {
           //  e.printStackTrace();

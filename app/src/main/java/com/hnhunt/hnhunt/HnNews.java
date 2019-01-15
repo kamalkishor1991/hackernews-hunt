@@ -5,11 +5,28 @@ public class HnNews {
     private String commentURL;
     private String commentCount;
     private long hnId;
-    public HnNews(long hnID, String url) {
+    private String title;
+    public HnNews(long hnID, String title, String url) {
         this.hnId = hnID;
         this.commentURL = "https://news.ycombinator.com/item?id=" + hnID;
         this.url = url;
+        this.title = title;
     }
 
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getURL() {
+        return url;
+    }
+
+    public String getCommentURL() {
+        return commentURL;
+    }
+
+    public long getHnId() {
+        return hnId;
+    }
 }

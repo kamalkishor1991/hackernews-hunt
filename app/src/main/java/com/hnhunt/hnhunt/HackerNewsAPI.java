@@ -11,11 +11,17 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.firebase.crash.FirebaseCrash;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class HackerNewsAPI {
     public static void topNewsStories(Context context, Consumer<List<Long>> result, Consumer<Exception> exception) {
@@ -43,27 +49,26 @@ public class HackerNewsAPI {
     }
 
 
-    public static void getStory(Context context, long hnId,
+    public static void getStory(long hnId,
                          Consumer<HnNews> result, Consumer<Exception> exception) {
-        String url = "https://hacker-news.firebaseio.com/v0/item/" + hnId +  ".json";
-        Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024); // 1MB cap
-        Network network = new BasicNetwork(new HurlStack());
-        RequestQueue mRequestQueue = new RequestQueue(cache, network);
-        mRequestQueue.start();
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest(
-                Request.Method.GET, url,
-                        null, (res) -> {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("https://hacker-news.firebaseio.com/v0/item/" + hnId + ".json", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    HnNews hnNews = new HnNews(hnId, res.getString("url"));
+                    String cts = response.getString("descendants");
+                    String score = response.getInt("score") + "";
+                    HnNews hnNews = new HnNews(hnId, response.getString("title"), response.getString("url"));
                     result.accept(hnNews);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
                     exception.accept(e);
+                    //TODO: put toast here ~ unable to update comments and points info
                 }
-            }, (e) -> {
-                exception.accept(e);
-            });
-        mRequestQueue.add(jsObjRequest);
+            }
+        });
     }
 
 

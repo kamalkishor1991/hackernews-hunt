@@ -51,17 +51,14 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    public static int THRESHOLD = 6;
+    public static int THRESHOLD = 5;
     public VerticalPagerAdapter(Context context) {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //if (LatestNews.getInstance().getData().size() <= 1) {
-            HackerNewsAPI.topNewsStories(context, response -> {
-                addData(response);
-                notifyDataSetChanged();
+        HackerNewsAPI.topNewsStories(context, response -> {
+            addData(response);
+        }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
 
-            }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
-       // }
     }
 
     @Override
@@ -72,17 +69,22 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public void addData(List<Long> list) {
         try {
             LatestNews.getInstance().addData(list);
+            LatestNews.getInstance().refreshNextPage((v) -> {
+
+            }, (exception) -> {
+
+            });
             notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    public List<Long> getData() {
-        return LatestNews.getInstance().getData();
+    public HnNews getHnNews(int position) {
+        return LatestNews.getInstance().getHnNews(position);
     }
 
     public void resetNewData(List<Long> newData) {
-        // LatestNews.getInstance().resetData(newData);
+        LatestNews.getInstance().resetData(newData);
         notifyDataSetChanged();
     }
 
@@ -96,18 +98,18 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
         try {
-            final long hn_id = LatestNews.getInstance().getData().get(position);
+            final long hnId = LatestNews.getInstance().getData().get(position);
+            final HnNews hnNews = LatestNews.getInstance().getHnNews(position);
             // JSONObject obj = LatestNews.getInstance().getData().getJSONObject(position);
-            final String title = "title: " + hn_id;//obj.getString("title");
-            final String url = "https://google.com";//obj.getString("url");
+            final String title = hnNews.getTitle();//obj.getString("title");
+            final String url = hnNews.getURL();//obj.getString("url");
             String host = "(" + new URL(url).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
             String summary = "summary";//obj.getString("summary");
             if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
                 itemView.findViewById(R.id.summary).setVisibility(View.GONE);
                 itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 itemView.findViewById(R.id.summary).setVisibility(View.VISIBLE);
                 itemView.findViewById(R.id.missing).setVisibility(View.GONE);
                 ((TextView) (itemView.findViewById(R.id.summary))).setText(summary);
@@ -131,11 +133,10 @@ public class VerticalPagerAdapter extends PagerAdapter {
                     .centerInside()
                     .into((ImageView)itemView.findViewById(R.id.profileBK));
 
-            TextView comments = (TextView) itemView.findViewById(R.id.comments);
-            TextView points = (TextView) itemView.findViewById(R.id.points);
+            TextView comments = itemView.findViewById(R.id.comments);
+            TextView points = itemView.findViewById(R.id.points);
             setCommentAndPoints(comments, points, "" + 10, "" + 10/*obj.getString("comment_count") , obj.getString("score")*/ );
             ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(System.currentTimeMillis())));
-            updateCommentsAndPoints(hn_id, comments, points);
             ImageButton imageButton = (ImageButton) itemView.findViewById(R.id.share);
             Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);
 
@@ -149,24 +150,21 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
             imageButton.setImageBitmap(shadowImage);
 
-            ((ImageButton) itemView.findViewById(R.id.share_bg)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent share = new Intent(android.content.Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            itemView.findViewById(R.id.share_bg).setOnClickListener(v -> {
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
 
-                    // Add data to the intent, the receiving app will decide
-                    // what to do with it.
-                    share.putExtra(Intent.EXTRA_SUBJECT, title);
-                    share.putExtra(Intent.EXTRA_TEXT, url);
+                // Add data to the intent, the receiving app will decide
+                // what to do with it.
+                share.putExtra(Intent.EXTRA_SUBJECT, title);
+                share.putExtra(Intent.EXTRA_TEXT, url);
 
-                    mContext.startActivity(Intent.createChooser(share, "Share this item!"));
-                    Bundle hnShare = new Bundle();
-                    hnShare.putLong("hn_id", hn_id);
-                    hnShare.putString("title", title);
-                    FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
-                }
+                mContext.startActivity(Intent.createChooser(share, "Share this item!"));
+                Bundle hnShare = new Bundle();
+                hnShare.putLong("hn_id", hnId);
+                hnShare.putString("title", title);
+                FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
             });
 
         } catch (Exception e) {
@@ -174,11 +172,11 @@ public class VerticalPagerAdapter extends PagerAdapter {
         }
 
         container.addView(itemView);
-        if (position + THRESHOLD == LatestNews.getInstance().getData().size()) {
-            HackerNewsAPI.topNewsStories(container.getContext(), (result) -> {
-                resetNewData(result);
-            }, (exception) -> {
-                FirebaseCrash.log("Network Prob after threshold: " + exception);
+        if (position + THRESHOLD == LatestNews.getInstance().getLastUpdatedIndex()) {
+            LatestNews.getInstance().refreshNextPage((v) -> {
+                //notifyDataSetChanged();
+            }, e -> {
+                FirebaseCrash.log("Network Prob after threshold: " + e);
             });
         }
 

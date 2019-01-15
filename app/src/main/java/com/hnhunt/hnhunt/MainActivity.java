@@ -47,33 +47,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Window window = getWindow();
         mFirebaseAnalytics.logEvent("main_activity", null);
-// clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-// finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-       /* if (LatestNews.getInstance().getData().length() == 0) {
-            Utility.fetchSingleNews(getApplicationContext(), getIntent().getStringExtra("id"), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    LatestNews.getInstance().addSingleObj(response);
-                    setupViewPager(viewPager);
-                }
 
-            });
-        }
-        else {*/
         setupViewPager(viewPager);
-        //}
-
-
     }
 
 
@@ -104,23 +88,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                JSONObject obj = briefNews.getCurrentPage();
+                HnNews obj = briefNews.getCurrentPage();
                 if (obj != null) {
-                    try {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("hn_id", obj.getString("hn_id"));
-                        bundle.putString("position", position + "");
-                        mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("hn_id", obj.getHnId() + "");
+                    bundle.putString("position", position + "");
+                    mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        comments.setUrl(obj.getString("comment_url"));
-                        orginal.setUrl(obj.getString("url"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    comments.setUrl(obj.getCommentURL());
+                    orginal.setUrl(obj.getURL());
                 }
             }
 
