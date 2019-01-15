@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     WebViewFragment comments, orginal;
 
     @Override
-  protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
@@ -55,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
 // finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (LatestNews.getInstance().getData().length() == 0) {
+       /* if (LatestNews.getInstance().getData().length() == 0) {
             Utility.fetchSingleNews(getApplicationContext(), getIntent().getStringExtra("id"), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -69,21 +69,20 @@ public class MainActivity extends AppCompatActivity {
 
             });
         }
-        else {
-            setupViewPager(viewPager);
-        }
+        else {*/
+        setupViewPager(viewPager);
+        //}
 
 
-  }
+    }
 
 
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
 
     private void setupViewPager(ViewPager viewPager) {
@@ -132,20 +131,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
-    return super.onOptionsItemSelected(item);
-  }
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 1) super.onBackPressed();
@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
 

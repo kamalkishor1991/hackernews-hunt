@@ -33,10 +33,10 @@ public class BriefNews extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_style, container, false);
 
-        verticalViewPager = (VerticalViewPager) rootView.findViewById(R.id.verticleViewPager);
+        verticalViewPager = rootView.findViewById(R.id.verticleViewPager);
         verticalViewPager.setAdapter(adapter = new VerticalPagerAdapter(container.getContext()));
 
-        final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+        final SwipeRefreshLayout swipeView = rootView.findViewById(R.id.swipe);
         verticalViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -65,7 +65,13 @@ public class BriefNews extends Fragment {
             @Override
             public void onRefresh() {
                 swipeView.setRefreshing(true);
-                Utility.fetchNews(container.getContext(), null, new Response.Listener<JSONArray>() {
+                HackerNewsAPI.topNewsStories(container.getContext(), (result) -> {
+                    adapter.resetNewData(result);
+                    swipeView.setRefreshing(false);
+                }, (exception) -> {
+                    swipeView.setRefreshing(false);
+                });
+               /* Utility.fetchNews(container.getContext(), null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         adapter.resetNewData(response);
@@ -78,7 +84,7 @@ public class BriefNews extends Fragment {
                         swipeView.setRefreshing(false);
 
                     }
-                });
+                });*/
 
             }
         });
@@ -87,12 +93,13 @@ public class BriefNews extends Fragment {
     }
 
     public JSONObject getCurrentPage() {
-        try {
-            return adapter.getData().getJSONObject(verticalViewPager.getCurrentItem());
-        } catch (JSONException e) {
-            e.printStackTrace();
-            FirebaseCrash.log("exception while getting data: " + e);
-        }
-        return null;
+        //try {
+            return null;
+            //return adapter.getData().getJSONObject(verticalViewPager.getCurrentItem());
+        //} catch (JSONException e) {
+          //  e.printStackTrace();
+          //  FirebaseCrash.log("exception while getting data: " + e);
+        //}
+        //return null;
     }
 }

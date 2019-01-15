@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 import com.hnhunt.hnhunt.utils.PrefUtils;
 import com.hnhunt.hnhunt.utils.Utility;
@@ -54,29 +55,21 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public VerticalPagerAdapter(Context context) {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (LatestNews.getInstance().getData().length() <= 1) {
-            Utility.fetchNews(context, null, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    addData(response);
-                    notifyDataSetChanged();
+        //if (LatestNews.getInstance().getData().size() <= 1) {
+            HackerNewsAPI.topNewsStories(context, response -> {
+                addData(response);
+                notifyDataSetChanged();
 
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error);
-                }
-            });
-        }
+            }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
+       // }
     }
 
     @Override
     public int getCount() {
-        return LatestNews.getInstance().getData().length();
+        return LatestNews.getInstance().getData().size();
     }
 
-    public void addData(JSONArray list) {
+    public void addData(List<Long> list) {
         try {
             LatestNews.getInstance().addData(list);
             notifyDataSetChanged();
@@ -84,12 +77,12 @@ public class VerticalPagerAdapter extends PagerAdapter {
             e.printStackTrace();
         }
     }
-    public JSONArray getData() {
+    public List<Long> getData() {
         return LatestNews.getInstance().getData();
     }
 
-    public void resetNewData(JSONArray newData) {
-        LatestNews.getInstance().resetData(newData);
+    public void resetNewData(List<Long> newData) {
+        // LatestNews.getInstance().resetData(newData);
         notifyDataSetChanged();
     }
 
@@ -103,13 +96,13 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
         try {
-            JSONObject obj = LatestNews.getInstance().getData().getJSONObject(position);
-            final String title = obj.getString("title");
-            final String url = obj.getString("url");
-            final long hn_id = obj.getLong("hn_id");
+            final long hn_id = LatestNews.getInstance().getData().get(position);
+            // JSONObject obj = LatestNews.getInstance().getData().getJSONObject(position);
+            final String title = "title: " + hn_id;//obj.getString("title");
+            final String url = "https://google.com";//obj.getString("url");
             String host = "(" + new URL(url).getHost() + ")";
             ((TextView)(itemView.findViewById(R.id.title))).setText(title);
-            String summary = obj.getString("summary");
+            String summary = "summary";//obj.getString("summary");
             if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
                 itemView.findViewById(R.id.summary).setVisibility(View.GONE);
                 itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
@@ -126,13 +119,13 @@ public class VerticalPagerAdapter extends PagerAdapter {
             text.setSpan(new RelativeSizeSpan(0.75f), title.length(), title.length() + host.length() + 1, 0); // set size
             ((TextView)(itemView.findViewById(R.id.title))).setText(text);
 
-            Picasso.with(mContext).load(obj.getString("top_image"))
+            Picasso.with(mContext).load(/*obj.getString("top_image")*/"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
                     .placeholder(R.drawable.background_default)
                     .fit()
                     .centerInside()
                     .into((ImageView)itemView.findViewById(R.id.profileImageView));
 
-            Picasso.with(mContext).load(obj.getString("top_image"))
+            Picasso.with(mContext).load(/*obj.getString("top_image")*/"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
                     .placeholder(R.drawable.background_default)
                     .resize(7,7)
                     .centerInside()
@@ -140,8 +133,8 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
             TextView comments = (TextView) itemView.findViewById(R.id.comments);
             TextView points = (TextView) itemView.findViewById(R.id.points);
-            setCommentAndPoints(comments, points, obj.getString("comment_count") , obj.getString("score") );
-            ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(obj.getLong("epoch") * 1000)));
+            setCommentAndPoints(comments, points, "" + 10, "" + 10/*obj.getString("comment_count") , obj.getString("score")*/ );
+            ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(System.currentTimeMillis())));
             updateCommentsAndPoints(hn_id, comments, points);
             ImageButton imageButton = (ImageButton) itemView.findViewById(R.id.share);
             Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);
@@ -181,23 +174,11 @@ public class VerticalPagerAdapter extends PagerAdapter {
         }
 
         container.addView(itemView);
-        if (position + THRESHOLD == LatestNews.getInstance().getData().length()) {
-            Utility.fetchNews(mContext, "" + LatestNews.getInstance().getIncPage(), new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    try {
-                        LatestNews.getInstance().addData(response);
-                        notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    FirebaseCrash.log("Network Prob after threshold: " + error);
-                }
+        if (position + THRESHOLD == LatestNews.getInstance().getData().size()) {
+            HackerNewsAPI.topNewsStories(container.getContext(), (result) -> {
+                resetNewData(result);
+            }, (exception) -> {
+                FirebaseCrash.log("Network Prob after threshold: " + exception);
             });
         }
 

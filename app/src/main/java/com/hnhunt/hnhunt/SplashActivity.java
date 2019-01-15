@@ -24,31 +24,12 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Python python = Python.getInstance();
-        //python.getModule("");
-        PyObject os = python.getModule("os");
-        String osStr = os.toString();
-        // assertTrue(osStr, osStr.contains("module 'os'"));
-        PyObject osPath = python.getModule("os.path");
-        String sttt = os.get("path").toString();
-        PyObject article = python.getModule("newspaper").get("Article");
-        article = article.call("http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/");
-        //article.get("url").toString()
-        article.get("download").call();
-        String html = article.get("html").toString();
-        article.get("parse").call();
-        String text = article.get("text").toString();
-        PyObject punkt = python.getModule("nltk");
-        punkt.get("download").call("punkt");
-        article.get("nlp").call();
-        String summary = article.get("summary").toString();
-
-
-        Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
+        launchMainActivity();
+        /*Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 LatestNews.getInstance().resetData(response);
-                launchMainActivity();
+
             }
 
         }, new Response.ErrorListener() {
@@ -57,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
                 FirebaseCrash.log("Network Prob on splash: " + error);
                 Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     private void showLoading() {
