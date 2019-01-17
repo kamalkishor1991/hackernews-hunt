@@ -1,6 +1,7 @@
 package com.hnhunt.hnhunt;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -11,9 +12,11 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.firebase.crash.FirebaseCrash;
+import com.hnhunt.hnhunt.utils.Newpaper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,9 +59,30 @@ public class HackerNewsAPI {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    String cts = response.getString("descendants");
-                    String score = response.getInt("score") + "";
-                    HnNews hnNews = new HnNews(hnId, response.getString("title"), response.getString("url"));
+                    Log.i("Hackernews api", " id=" + hnId);
+                    String by = response.getString("by");
+                    List<Long> kids = new ArrayList<>();
+                    long cts = Long.parseLong(response.getString("descendants"));
+
+                    JSONArray kidsArray = response.optJSONArray("kids");
+                    if (kidsArray != null) {
+                        for (int i = 0; i < kidsArray.length(); i++) {
+                            kids.add(kidsArray.getLong(i));
+                        }
+                    }
+                    long score = response.getLong("score");
+                    long time = response.getLong("time");
+                    String title = response.getString("title");
+                    String type = response.getString("type");
+                    String url = response.getString("url");
+                    HnNews hnNews = new HnNews(by, cts, hnId, kids, time, title, type, score, url);
+                    try {
+                        Newpaper newpaper = new Newpaper(url);
+                        hnNews.setSummary(newpaper.getSummary());
+                        hnNews.setTopImage(newpaper.getTopImage());
+                    } catch (Exception e) {
+
+                    }
                     result.accept(hnNews);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -99,11 +99,11 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
         final long hnId = LatestNews.getInstance().getData().get(position);
         final HnNews hnNews = LatestNews.getInstance().getHnNews(position);
-        final String title = hnNews.getTitle();//obj.getString("title");
-        final String url = hnNews.getURL();//obj.getString("url");
+        final String title = hnNews.getTitle();
+        final String url = hnNews.getURL();
         String host = getHost(url);
         ((TextView)(itemView.findViewById(R.id.title))).setText(title);
-        String summary = "summary";//obj.getString("summary");
+        String summary = hnNews.getSummary();//obj.getString("summary");
         if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
             itemView.findViewById(R.id.summary).setVisibility(View.GONE);
             itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
@@ -145,7 +145,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
         TextView comments = itemView.findViewById(R.id.comments);
         TextView points = itemView.findViewById(R.id.points);
-        setCommentAndPoints(comments, points, "" + 10, "" + 10/*obj.getString("comment_count") , obj.getString("score")*/ );
+        setCommentAndPoints(comments, points, "" + hnNews.getDecendents(), "" + hnNews.getScore());
         ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(System.currentTimeMillis())));
         ImageButton imageButton = itemView.findViewById(R.id.share);
         Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);

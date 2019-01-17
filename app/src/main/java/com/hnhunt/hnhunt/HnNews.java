@@ -1,16 +1,33 @@
 package com.hnhunt.hnhunt;
 
+import java.util.List;
+
 public class HnNews {
-    private String url;
-    private String commentURL;
-    private String commentCount;
-    private long hnId;
+    private String by;
+    private long decendents;
+    private long id;
+    private List<Long> kids;
+    private long time;
     private String title;
-    public HnNews(long hnID, String title, String url) {
-        this.hnId = hnID;
-        this.commentURL = "https://news.ycombinator.com/item?id=" + hnID;
-        this.url = url;
+    private String type;
+    private long score;
+    private String url;
+
+    private String summary;
+    private String topImage;
+
+
+    public HnNews(String by, long decendents, long id, List<Long> kids, long time,
+                  String title, String type, long score, String url) {
+        this.by = by;
+        this.decendents = decendents;
+        this.id = id;
+        this.kids = kids;
+        this.time = time;
         this.title = title;
+        this.type = type;
+        this.score = score;
+        this.url = url;
     }
 
 
@@ -23,10 +40,50 @@ public class HnNews {
     }
 
     public String getCommentURL() {
-        return commentURL;
+        return "https://news.ycombinator.com/item?id=" + id;
     }
 
     public long getHnId() {
-        return hnId;
+        return id;
+    }
+
+    public String getBy() {
+        return by;
+    }
+
+    public long getDecendents() {
+        return decendents;
+    }
+
+    public List<Long> getKids() {
+        return kids;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public long getScore() {
+        return score;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getTopImage() {
+        return topImage;
+    }
+
+    public void setTopImage(String topImage) {
+        this.topImage = topImage;
     }
 }

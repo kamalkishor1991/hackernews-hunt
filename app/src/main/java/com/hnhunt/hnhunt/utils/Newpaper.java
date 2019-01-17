@@ -15,20 +15,20 @@ public class Newpaper {
         //python.getModule("");
         // assertTrue(osStr, osStr.contains("module 'os'"));
         this.article = python.getModule("newspaper").get("Article");
-        article = article.call("http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/");
+        article = article.call(url);
         //article.get("url").toString()
         article.get("download").call();
         // String html = article.get("html").toString();
         article.get("parse").call();
         this.text = article.get("text").toString();
-        PyObject punkt = python.getModule("nltk");
-        punkt.get("download").call("punkt");
+        // PyObject punkt = python.getModule("nltk");
+        // punkt.get("download").call("punkt");
         article.get("nlp").call();
         this.summary = article.get("summary").toString();
 
     }
 
-    public String summary() {
+    public String getSummary() {
         return summary;
     }
 
