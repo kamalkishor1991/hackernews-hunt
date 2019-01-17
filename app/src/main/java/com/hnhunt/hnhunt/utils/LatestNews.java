@@ -42,7 +42,7 @@ public class LatestNews {
     public HnNews getHnNews(int position) {
         return hnNewsHashMap.get(data.get(position));
     }
-    public void addData(List<Long> news) throws JSONException {
+    public void addData(List<Long> news) {
         this.data = news;
     }
 

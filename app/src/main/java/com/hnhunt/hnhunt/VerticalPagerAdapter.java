@@ -9,6 +9,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.text.Spannable;
@@ -38,6 +42,7 @@ import org.json.JSONObject;
 
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -67,17 +72,12 @@ public class VerticalPagerAdapter extends PagerAdapter {
     }
 
     public void addData(List<Long> list) {
-        try {
-            LatestNews.getInstance().addData(list);
-            LatestNews.getInstance().refreshNextPage((v) -> {
-
-            }, (exception) -> {
-
-            });
-            notifyDataSetChanged();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        LatestNews.getInstance().addData(list);
+        LatestNews.getInstance().refreshNextPage((v) -> {
+            runOnUIThread(() -> notifyDataSetChanged());
+        }, (exception) -> {
+            //TODO put toast here.
+        });
     }
     public HnNews getHnNews(int position) {
         return LatestNews.getInstance().getHnNews(position);
@@ -93,85 +93,92 @@ public class VerticalPagerAdapter extends PagerAdapter {
         return view == (object);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
-        try {
-            final long hnId = LatestNews.getInstance().getData().get(position);
-            final HnNews hnNews = LatestNews.getInstance().getHnNews(position);
-            // JSONObject obj = LatestNews.getInstance().getData().getJSONObject(position);
-            final String title = hnNews.getTitle();//obj.getString("title");
-            final String url = hnNews.getURL();//obj.getString("url");
-            String host = "(" + new URL(url).getHost() + ")";
-            ((TextView)(itemView.findViewById(R.id.title))).setText(title);
-            String summary = "summary";//obj.getString("summary");
-            if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
-                itemView.findViewById(R.id.summary).setVisibility(View.GONE);
-                itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
-            } else {
-                itemView.findViewById(R.id.summary).setVisibility(View.VISIBLE);
-                itemView.findViewById(R.id.missing).setVisibility(View.GONE);
-                ((TextView) (itemView.findViewById(R.id.summary))).setText(summary);
-            }
 
-            final SpannableString text = new SpannableString(title + " " + host);
-            text.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.grey)), title.length(), title.length() + host.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        final long hnId = LatestNews.getInstance().getData().get(position);
+        final HnNews hnNews = LatestNews.getInstance().getHnNews(position);
+        final String title = hnNews.getTitle();//obj.getString("title");
+        final String url = hnNews.getURL();//obj.getString("url");
+        String host = getHost(url);
+        ((TextView)(itemView.findViewById(R.id.title))).setText(title);
+        String summary = "summary";//obj.getString("summary");
+        if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
+            itemView.findViewById(R.id.summary).setVisibility(View.GONE);
+            itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
+        } else {
+            itemView.findViewById(R.id.summary).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.missing).setVisibility(View.GONE);
+            ((TextView) (itemView.findViewById(R.id.summary))).setText(summary);
+        }
 
-            text.setSpan(new RelativeSizeSpan(0.75f), title.length(), title.length() + host.length() + 1, 0); // set size
-            ((TextView)(itemView.findViewById(R.id.title))).setText(text);
+        final SpannableString text = new SpannableString(title + " " + host);
+        text.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.grey)), title.length(), title.length() + host.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            Picasso.with(mContext).load(/*obj.getString("top_image")*/"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
-                    .placeholder(R.drawable.background_default)
+        text.setSpan(new RelativeSizeSpan(0.75f), title.length(), title.length() + host.length() + 1, 0); // set size
+        ((TextView)(itemView.findViewById(R.id.title))).setText(text);
+        runOnUIThread(() -> {
+            Picasso.with(mContext).load("https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
+                .placeholder(R.drawable.background_default)
                     .fit()
                     .centerInside()
                     .into((ImageView)itemView.findViewById(R.id.profileImageView));
 
-            Picasso.with(mContext).load(/*obj.getString("top_image")*/"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
-                    .placeholder(R.drawable.background_default)
+            Picasso.with(mContext).load("https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
+                .placeholder(R.drawable.background_default)
                     .resize(7,7)
                     .centerInside()
                     .into((ImageView)itemView.findViewById(R.id.profileBK));
+        });
+        /*Picasso.with(mContext).load(*//*obj.getString("top_image")*//*"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
+                .placeholder(R.drawable.background_default)
+                .fit()
+                .centerInside()
+                .into((ImageView)itemView.findViewById(R.id.profileImageView));
 
-            TextView comments = itemView.findViewById(R.id.comments);
-            TextView points = itemView.findViewById(R.id.points);
-            setCommentAndPoints(comments, points, "" + 10, "" + 10/*obj.getString("comment_count") , obj.getString("score")*/ );
-            ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(System.currentTimeMillis())));
-            ImageButton imageButton = (ImageButton) itemView.findViewById(R.id.share);
-            Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);
+        Picasso.with(mContext).load(*//*obj.getString("top_image")*//*"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
+                .placeholder(R.drawable.background_default)
+                .resize(7,7)
+                .centerInside()
+                .into((ImageView)itemView.findViewById(R.id.profileBK));*/
 
-            BlurMaskFilter blurFilter = new BlurMaskFilter(10, BlurMaskFilter.Blur.NORMAL);
-            Paint shadowPaint = new Paint();
-            shadowPaint.setMaskFilter(blurFilter);
+        TextView comments = itemView.findViewById(R.id.comments);
+        TextView points = itemView.findViewById(R.id.points);
+        setCommentAndPoints(comments, points, "" + 10, "" + 10/*obj.getString("comment_count") , obj.getString("score")*/ );
+        ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(System.currentTimeMillis())));
+        ImageButton imageButton = itemView.findViewById(R.id.share);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);
 
-            int[] offsetXY = new int[2];
-            Bitmap shadowImage = originalBitmap.extractAlpha(shadowPaint, offsetXY);
+        BlurMaskFilter blurFilter = new BlurMaskFilter(10, BlurMaskFilter.Blur.NORMAL);
+        Paint shadowPaint = new Paint();
+        shadowPaint.setMaskFilter(blurFilter);
+
+        int[] offsetXY = new int[2];
+        Bitmap shadowImage = originalBitmap.extractAlpha(shadowPaint, offsetXY);
 
 
-            imageButton.setImageBitmap(shadowImage);
+        imageButton.setImageBitmap(shadowImage);
 
-            itemView.findViewById(R.id.share_bg).setOnClickListener(v -> {
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        itemView.findViewById(R.id.share_bg).setOnClickListener(v -> {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
 
-                // Add data to the intent, the receiving app will decide
-                // what to do with it.
-                share.putExtra(Intent.EXTRA_SUBJECT, title);
-                share.putExtra(Intent.EXTRA_TEXT, url);
+            // Add data to the intent, the receiving app will decide
+            // what to do with it.
+            share.putExtra(Intent.EXTRA_SUBJECT, title);
+            share.putExtra(Intent.EXTRA_TEXT, url);
 
-                mContext.startActivity(Intent.createChooser(share, "Share this item!"));
-                Bundle hnShare = new Bundle();
-                hnShare.putLong("hn_id", hnId);
-                hnShare.putString("title", title);
-                FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
-            });
+            mContext.startActivity(Intent.createChooser(share, "Share this item!"));
+            Bundle hnShare = new Bundle();
+            hnShare.putLong("hn_id", hnId);
+            hnShare.putString("title", title);
+            FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
+        });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        runOnUIThread(() -> container.addView(itemView));
 
-        container.addView(itemView);
         if (position + THRESHOLD == LatestNews.getInstance().getLastUpdatedIndex()) {
             LatestNews.getInstance().refreshNextPage((v) -> {
                 //notifyDataSetChanged();
@@ -182,6 +189,24 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
 
         return itemView;
+    }
+
+    private void runOnUIThread(Runnable runnable) {
+        // Get a handler that can be used to post to the main thread
+        Handler mainHandler = new Handler(mContext.getMainLooper());
+        mainHandler.post(runnable);
+    }
+
+    @NonNull
+    private String getHost(String url) {
+        String host = null;
+        try {
+            host = "(" + new URL(url).getHost() + ")";
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return host;
     }
 
     private void setCommentAndPoints(TextView comments, TextView points, String comment_count, String score)  {
