@@ -118,19 +118,19 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
         text.setSpan(new RelativeSizeSpan(0.75f), title.length(), title.length() + host.length() + 1, 0); // set size
         ((TextView)(itemView.findViewById(R.id.title))).setText(text);
-        runOnUIThread(() -> {
-            Picasso.with(mContext).load("https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
-                .placeholder(R.drawable.background_default)
-                    .fit()
-                    .centerInside()
-                    .into((ImageView)itemView.findViewById(R.id.profileImageView));
 
-            Picasso.with(mContext).load("https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
-                .placeholder(R.drawable.background_default)
-                    .resize(7,7)
-                    .centerInside()
-                    .into((ImageView)itemView.findViewById(R.id.profileBK));
-        });
+        Picasso.with(mContext).load(hnNews.getTopImage())
+            .placeholder(R.drawable.background_default)
+                .fit()
+                .centerInside()
+                .into((ImageView)itemView.findViewById(R.id.profileImageView));
+
+        Picasso.with(mContext).load(hnNews.getTopImage())
+            .placeholder(R.drawable.background_default)
+                .resize(7,7)
+                .centerInside()
+                .into((ImageView)itemView.findViewById(R.id.profileBK));
+
         /*Picasso.with(mContext).load(*//*obj.getString("top_image")*//*"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
                 .placeholder(R.drawable.background_default)
                 .fit()

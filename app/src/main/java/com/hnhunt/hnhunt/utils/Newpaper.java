@@ -25,6 +25,7 @@ public class Newpaper {
         // punkt.get("download").call("punkt");
         article.get("nlp").call();
         this.summary = article.get("summary").toString();
+        this.topImage = article.get("top_image").toString();
 
     }
 
