@@ -74,10 +74,10 @@ public class HackerNewsAPI {
                     long time = response.getLong("time");
                     String title = response.getString("title");
                     String type = response.getString("type");
-                    String url = response.getString("url");
+                    String url = response.optString("url", "https://news.ycombinator.com/item?id=" + hnId);
                     HnNews hnNews = new HnNews(by, cts, hnId, kids, time, title, type, score, url);
                     try {
-                        Newpaper newpaper = new Newpaper(url);
+                        Newpaper newpaper = new Newpaper(hnNews.getURL());
                         hnNews.setSummary(newpaper.getSummary());
                         hnNews.setTopImage(newpaper.getTopImage());
                     } catch (Exception e) {

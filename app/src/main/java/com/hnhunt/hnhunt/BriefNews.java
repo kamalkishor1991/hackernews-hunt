@@ -9,17 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.hnhunt.hnhunt.utils.PrefUtils;
-import com.hnhunt.hnhunt.utils.Utility;
+import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 
 public class BriefNews extends Fragment {
 
@@ -37,7 +29,8 @@ public class BriefNews extends Fragment {
         verticalViewPager.setAdapter(adapter = new VerticalPagerAdapter(container.getContext()));
 
         final SwipeRefreshLayout swipeView = rootView.findViewById(R.id.swipe);
-        verticalViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        //verticalViewPager.
+        verticalViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -71,20 +64,7 @@ public class BriefNews extends Fragment {
                 }, (exception) -> {
                     swipeView.setRefreshing(false);
                 });
-               /* Utility.fetchNews(container.getContext(), null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        adapter.resetNewData(response);
-                        swipeView.setRefreshing(false);
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        swipeView.setRefreshing(false);
-
-                    }
-                });*/
 
             }
         });

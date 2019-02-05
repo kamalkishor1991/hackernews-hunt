@@ -51,6 +51,7 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:11.0.4'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     compile 'com.google.firebase:firebase-messaging:11.0.4'
+    compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

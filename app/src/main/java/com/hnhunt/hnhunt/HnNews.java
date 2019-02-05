@@ -36,6 +36,7 @@ public class HnNews {
     }
 
     public String getURL() {
+
         return url;
     }
 
