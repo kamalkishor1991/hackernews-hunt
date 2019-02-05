@@ -5,50 +5,38 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhunt.utils.LatestNews;
+import com.hnhunt.hnhunt.utils.Utility;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
-import com.hnhunt.hnhunt.utils.PrefUtils;
-import com.hnhunt.hnhunt.utils.Utility;
 import cz.msebera.android.httpclient.Header;
 
 
@@ -119,34 +107,13 @@ public class VerticalPagerAdapter extends PagerAdapter {
         text.setSpan(new RelativeSizeSpan(0.75f), title.length(), title.length() + host.length() + 1, 0); // set size
         ((TextView)(itemView.findViewById(R.id.title))).setText(text);
 
-        Picasso.with(mContext).load(hnNews.getTopImage())
-            .placeholder(R.drawable.background_default)
-                .fit()
-                .centerInside()
-                .into((ImageView)itemView.findViewById(R.id.profileImageView));
-
-        Picasso.with(mContext).load(hnNews.getTopImage())
-            .placeholder(R.drawable.background_default)
-                .resize(7,7)
-                .centerInside()
-                .into((ImageView)itemView.findViewById(R.id.profileBK));
-
-        /*Picasso.with(mContext).load(*//*obj.getString("top_image")*//*"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
-                .placeholder(R.drawable.background_default)
-                .fit()
-                .centerInside()
-                .into((ImageView)itemView.findViewById(R.id.profileImageView));
-
-        Picasso.with(mContext).load(*//*obj.getString("top_image")*//*"https://pixabay.com/en/board-school-uni-learn-work-test-361516/")
-                .placeholder(R.drawable.background_default)
-                .resize(7,7)
-                .centerInside()
-                .into((ImageView)itemView.findViewById(R.id.profileBK));*/
+        showTopImage(itemView, hnNews);
 
         TextView comments = itemView.findViewById(R.id.comments);
         TextView points = itemView.findViewById(R.id.points);
         setCommentAndPoints(comments, points, "" + hnNews.getDecendents(), "" + hnNews.getScore());
-        ((TextView) itemView.findViewById(R.id.time)).setText("Published: " + Utility.formatTime(new Date(System.currentTimeMillis())));
+        ((TextView) itemView.findViewById(R.id.time)).setText("Published: " +
+                Utility.formatTime(new Date(hnNews.getEpochTimeMs())));
         ImageButton imageButton = itemView.findViewById(R.id.share);
         Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);
 
@@ -189,6 +156,22 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
 
         return itemView;
+    }
+
+    private void showTopImage(View itemView, HnNews hnNews) {
+        if (hnNews.getTopImage() != null && !hnNews.getTopImage().isEmpty()) {
+            Picasso.with(mContext).load(hnNews.getTopImage())
+                    .placeholder(R.drawable.background_default)
+                    .fit()
+                    .centerInside()
+                    .into((ImageView) itemView.findViewById(R.id.profileImageView));
+
+            Picasso.with(mContext).load(hnNews.getTopImage())
+                    .placeholder(R.drawable.background_default)
+                    .resize(7, 7)
+                    .centerInside()
+                    .into((ImageView) itemView.findViewById(R.id.profileBK));
+        }
     }
 
     private void runOnUIThread(Runnable runnable) {
