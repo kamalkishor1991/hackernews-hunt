@@ -63,6 +63,11 @@ public class HnNews {
         return time;
     }
 
+    public long getEpochTimeMs() {
+        return time * 1000;
+    }
+
+
     public String getType() {
         return type;
     }

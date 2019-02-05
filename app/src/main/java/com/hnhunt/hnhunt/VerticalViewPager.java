@@ -6,10 +6,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.lang.reflect.Field;
+
 public class VerticalViewPager extends ViewPager {
 
     public VerticalViewPager(Context context) {
         super(context);
+
         init();
     }
 
@@ -23,6 +26,19 @@ public class VerticalViewPager extends ViewPager {
         setPageTransformer(true, new VerticalPageTransformer());
         // The easiest way to get rid of the overscroll drawing that happens on the left and right
         setOverScrollMode(OVER_SCROLL_NEVER);
+        try {
+            Field mFlingDistance;
+            mFlingDistance = ViewPager.class.getDeclaredField("mFlingDistance");
+            mFlingDistance.setAccessible(true);
+            // Set custom value:
+            mFlingDistance.set(this, 10);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

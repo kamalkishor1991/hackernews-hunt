@@ -21,8 +21,8 @@ public class Newpaper {
         // String html = article.get("html").toString();
         article.get("parse").call();
         this.text = article.get("text").toString();
-        // PyObject punkt = python.getModule("nltk");
-        // punkt.get("download").call("punkt");
+        PyObject punkt = python.getModule("nltk");
+        punkt.get("download").call("punkt");
         article.get("nlp").call();
         this.summary = article.get("summary").toString();
         this.topImage = article.get("top_image").toString();
