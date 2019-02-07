@@ -1,21 +1,35 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.hnhunt.hnhunt"
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion 16
+        targetSdkVersion 26
         versionCode 5
         versionName "2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+        python {
+            pip {
+                install "newspaper3k==0.2.8"
+            }
+            extractPackages "newspaper"
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
     }
 }
 
@@ -37,6 +51,7 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:11.0.4'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     compile 'com.google.firebase:firebase-messaging:11.0.4'
+    compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

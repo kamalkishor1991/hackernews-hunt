@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
@@ -22,12 +24,12 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
+        launchMainActivity();
+        /*Utility.fetchNews( getApplicationContext(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 LatestNews.getInstance().resetData(response);
-                launchMainActivity();
+
             }
 
         }, new Response.ErrorListener() {
@@ -36,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
                 FirebaseCrash.log("Network Prob on splash: " + error);
                 Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     private void showLoading() {

@@ -15,6 +15,8 @@ import android.view.WindowManager;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhunt.utils.LatestNews;
@@ -27,6 +29,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -34,50 +38,35 @@ public class MainActivity extends AppCompatActivity {
     WebViewFragment comments, orginal;
 
     @Override
-  protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         Window window = getWindow();
         mFirebaseAnalytics.logEvent("main_activity", null);
-// clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-// finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
         }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (LatestNews.getInstance().getData().length() == 0) {
-            Utility.fetchSingleNews(getApplicationContext(), getIntent().getStringExtra("id"), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    LatestNews.getInstance().addSingleObj(response);
-                    setupViewPager(viewPager);
-                }
 
-            });
-        }
-        else {
-            setupViewPager(viewPager);
-        }
+        setupViewPager(viewPager);
+    }
 
 
-  }
-
-
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
 
     private void setupViewPager(ViewPager viewPager) {
@@ -99,23 +88,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                JSONObject obj = briefNews.getCurrentPage();
+                HnNews obj = briefNews.getCurrentPage();
                 if (obj != null) {
-                    try {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("hn_id", obj.getString("hn_id"));
-                        bundle.putString("position", position + "");
-                        mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("hn_id", obj.getHnId() + "");
+                    bundle.putString("position", position + "");
+                    mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        comments.setUrl(obj.getString("comment_url"));
-                        orginal.setUrl(obj.getString("url"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    comments.setUrl(obj.getCommentURL());
+                    orginal.setUrl(obj.getURL());
                 }
             }
 
@@ -126,20 +107,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
-    return super.onOptionsItemSelected(item);
-  }
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 1) super.onBackPressed();
@@ -153,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
 
