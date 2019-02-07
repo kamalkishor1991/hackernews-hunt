@@ -44,7 +44,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    public static int THRESHOLD = 5;
+    public static int THRESHOLD = 3;
     public VerticalPagerAdapter(Context context) {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

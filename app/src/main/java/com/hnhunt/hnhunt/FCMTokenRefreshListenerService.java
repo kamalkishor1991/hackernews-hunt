@@ -29,7 +29,7 @@ public class FCMTokenRefreshListenerService extends FirebaseInstanceIdService {
     //If the token is changed registering the device again
     @Override
     public void onTokenRefresh() {
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+      /*  String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d("Firebase token refresh", "Refreshed token: " + refreshedToken);
 
         // If you want to send messages to this application instance or
@@ -46,12 +46,12 @@ public class FCMTokenRefreshListenerService extends FirebaseInstanceIdService {
             e.printStackTrace();
         }
 
-        sendRegistrationToServer(refreshedToken, json.toString());
+        sendRegistrationToServer(refreshedToken, json.toString());*/
 
     }
     private void sendRegistrationToServer(String device_token, String timezone)  {
 
-        SyncHttpClient client = new SyncHttpClient();
+       /* SyncHttpClient client = new SyncHttpClient();
         Map<String, String> map = new HashMap<>();
         map.put("device[device_token]", device_token);
         map.put("device[timezone]", timezone);
@@ -67,6 +67,6 @@ public class FCMTokenRefreshListenerService extends FirebaseInstanceIdService {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 System.out.println("Failed to send device token.");
             }
-        });
+        });*/
     }
 }
