@@ -147,10 +147,12 @@ public class VerticalPagerAdapter extends PagerAdapter {
         runOnUIThread(() -> container.addView(itemView));
 
         if (position + THRESHOLD == LatestNews.getInstance().getLastUpdatedIndex()) {
-            LatestNews.getInstance().refreshNextPage((v) -> {
-                //notifyDataSetChanged();
-            }, e -> {
-                FirebaseCrash.log("Network Prob after threshold: " + e);
+            runOnUIThread(() -> {
+                LatestNews.getInstance().refreshNextPage((v) -> {
+                    //notifyDataSetChanged();
+                }, e -> {
+                    FirebaseCrash.log("Network Prob after threshold: " + e);
+                });
             });
         }
 
@@ -192,8 +194,8 @@ public class VerticalPagerAdapter extends PagerAdapter {
         return host;
     }
 
-    private void setCommentAndPoints(TextView comments, TextView points, String comment_count, String score)  {
-        comments.setText(comment_count + " comments");
+    private void setCommentAndPoints(TextView comments, TextView points, String commentCount, String score)  {
+        comments.setText(commentCount + " comments");
         points.setText(score +  " points");
     }
 

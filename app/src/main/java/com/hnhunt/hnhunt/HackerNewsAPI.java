@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -78,10 +79,11 @@ public class HackerNewsAPI {
                     HnNews hnNews = new HnNews(by, cts, hnId, kids, time, title, type, score, url);
                     try {
                         Newpaper newpaper = new Newpaper(hnNews.getURL());
+                        newpaper.parse();
                         hnNews.setSummary(newpaper.getSummary());
                         hnNews.setTopImage(newpaper.getTopImage());
-                    } catch (Exception e) {
-
+                    } catch (Throwable e) {
+                        //Logger.getLogger(this.getClass().getName()).log(e.toString() + "");
                     }
                     result.accept(hnNews);
                 } catch (JSONException e) {

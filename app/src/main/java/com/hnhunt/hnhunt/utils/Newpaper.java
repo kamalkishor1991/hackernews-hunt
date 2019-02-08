@@ -5,12 +5,16 @@ import com.chaquo.python.Python;
 
 public class Newpaper {
     private PyObject article;
-    private String title;
     private String topImage;
     private String summary;
     private String text;
+    private String url;
 
     public Newpaper(String url) {
+        this.url = url;
+    }
+
+    public void parse() {
         if (!url.endsWith(".pdf")) {
             Python python = Python.getInstance();
             //python.getModule("");
