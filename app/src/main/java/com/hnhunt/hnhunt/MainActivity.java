@@ -13,18 +13,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
-import com.hnhunt.hnhunt.utils.LatestNews;
-import com.hnhunt.hnhunt.utils.Utility;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupViewPager(ViewPager viewPager) {
-        final BriefNews briefNews;
+        final NewsFragment newsFragment;
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(comments = new WebViewFragment());
-        adapter.addFragment(briefNews = new BriefNews());
+        adapter.addFragment(newsFragment = new NewsFragment());
         adapter.addFragment(orginal = new WebViewFragment());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
@@ -88,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                HnNews obj = briefNews.getCurrentPage();
+                HnNews obj = newsFragment.getCurrentPage();
                 if (obj != null) {
                     Bundle bundle = new Bundle();
                     bundle.putString("hn_id", obj.getHnId() + "");

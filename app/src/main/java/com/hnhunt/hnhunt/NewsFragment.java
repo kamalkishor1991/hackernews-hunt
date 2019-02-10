@@ -13,7 +13,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 
-public class BriefNews extends Fragment {
+public class NewsFragment extends Fragment {
 
     private VerticalViewPager verticalViewPager;
     private VerticalPagerAdapter adapter;
@@ -54,33 +54,22 @@ public class BriefNews extends Fragment {
             }
         });
 
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeView.setRefreshing(true);
-                HackerNewsAPI.topNewsStories(container.getContext(), (result) -> {
-                    adapter.resetNewData(result);
-                    swipeView.setRefreshing(false);
-                }, (exception) -> {
-                    swipeView.setRefreshing(false);
-                });
+        swipeView.setOnRefreshListener(() -> {
+            swipeView.setRefreshing(true);
+            HackerNewsAPI.topNewsStories(container.getContext(), (result) -> {
+                adapter.resetNewData(result);
+                swipeView.setRefreshing(false);
+            }, (exception) -> {
+                swipeView.setRefreshing(false);
+            });
 
 
-            }
         });
 
         return rootView;
     }
 
     public HnNews getCurrentPage() {
-        //try {
-            return adapter.getHnNews(verticalViewPager.getCurrentItem());
-            //return verticalViewPager.getCurrentItem();
-            //return adapter.getData().getJSONObject(verticalViewPager.getCurrentItem());
-        //} catch (JSONException e) {
-          //  e.printStackTrace();
-          //  FirebaseCrash.log("exception while getting data: " + e);
-        //}
-        //return null;
+        return adapter.getHnNews(verticalViewPager.getCurrentItem());
     }
 }

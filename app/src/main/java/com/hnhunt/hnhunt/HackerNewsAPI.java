@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -83,14 +82,13 @@ public class HackerNewsAPI {
                         hnNews.setSummary(newpaper.getSummary());
                         hnNews.setTopImage(newpaper.getTopImage());
                     } catch (Throwable e) {
-                        //Logger.getLogger(this.getClass().getName()).log(e.toString() + "");
+                        FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
                     }
                     result.accept(hnNews);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
                     exception.accept(e);
-                    //TODO: put toast here ~ unable to update comments and points info
                 }
             }
         });

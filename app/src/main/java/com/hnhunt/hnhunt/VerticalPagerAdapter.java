@@ -48,6 +48,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public VerticalPagerAdapter(Context context) {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         HackerNewsAPI.topNewsStories(context, response -> {
             addData(response);
         }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
