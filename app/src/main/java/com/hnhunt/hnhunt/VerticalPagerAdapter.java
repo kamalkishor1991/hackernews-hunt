@@ -112,7 +112,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
         TextView comments = itemView.findViewById(R.id.comments);
         TextView points = itemView.findViewById(R.id.points);
-        setCommentAndPoints(comments, points, "" + hnNews.getDecendents(), "" + hnNews.getScore());
+        setCommentAndPoints(comments, points, "" + hnNews.getDecedents(), "" + hnNews.getScore());
         ((TextView) itemView.findViewById(R.id.time)).setText("Published: " +
                 Utility.formatTime(new Date(hnNews.getEpochTimeMs())));
         ImageButton imageButton = itemView.findViewById(R.id.share);

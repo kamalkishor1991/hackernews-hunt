@@ -33,7 +33,7 @@ public class WebViewFragment extends Fragment {
         return webView.copyBackForwardList().getSize() > 2;
     }
     public void setUrl(final String url) {
-        webView = ((WebView)rootView.findViewById(R.id.webview));
+        webView = rootView.findViewById(R.id.webview);
 
         try {
             ((TextView)rootView.findViewById(R.id.host)).setText(new URL(url).getHost());

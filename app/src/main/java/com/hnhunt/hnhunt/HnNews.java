@@ -4,7 +4,7 @@ import java.util.List;
 
 public class HnNews {
     private String by;
-    private long decendents;
+    private long decedents;
     private long id;
     private List<Long> kids;
     private long time;
@@ -17,10 +17,10 @@ public class HnNews {
     private String topImage;
 
 
-    public HnNews(String by, long decendents, long id, List<Long> kids, long time,
+    public HnNews(String by, long decedents, long id, List<Long> kids, long time,
                   String title, String type, long score, String url) {
         this.by = by;
-        this.decendents = decendents;
+        this.decedents = decedents;
         this.id = id;
         this.kids = kids;
         this.time = time;
@@ -52,8 +52,8 @@ public class HnNews {
         return by;
     }
 
-    public long getDecendents() {
-        return decendents;
+    public long getDecedents() {
+        return decedents;
     }
 
     public List<Long> getKids() {

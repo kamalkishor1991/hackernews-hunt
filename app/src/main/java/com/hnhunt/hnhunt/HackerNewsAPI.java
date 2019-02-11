@@ -12,7 +12,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.firebase.crash.FirebaseCrash;
-import com.hnhunt.hnhunt.utils.Newpaper;
+import com.hnhunt.hnhunt.utils.Newspaper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -44,9 +44,7 @@ public class HackerNewsAPI {
                     }
                 }
                 result.accept(hnIds);
-            }, (e) -> {
-                exception.accept(e);
-            });
+            }, (e) -> exception.accept(e));
         mRequestQueue.add(jsObjRequest);
     }
 
@@ -77,10 +75,10 @@ public class HackerNewsAPI {
                     String url = response.optString("url", "https://news.ycombinator.com/item?id=" + hnId);
                     HnNews hnNews = new HnNews(by, cts, hnId, kids, time, title, type, score, url);
                     try {
-                        Newpaper newpaper = new Newpaper(hnNews.getURL());
-                        newpaper.parse();
-                        hnNews.setSummary(newpaper.getSummary());
-                        hnNews.setTopImage(newpaper.getTopImage());
+                        Newspaper newspaper = new Newspaper(hnNews.getURL());
+                        newspaper.parse();
+                        hnNews.setSummary(newspaper.getSummary());
+                        hnNews.setTopImage(newspaper.getTopImage());
                     } catch (Throwable e) {
                         FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
                     }

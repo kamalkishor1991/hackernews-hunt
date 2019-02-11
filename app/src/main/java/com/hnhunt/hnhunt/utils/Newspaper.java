@@ -3,14 +3,14 @@ package com.hnhunt.hnhunt.utils;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 
-public class Newpaper {
+public class Newspaper {
     private PyObject article;
     private String topImage;
     private String summary;
     private String text;
     private String url;
 
-    public Newpaper(String url) {
+    public Newspaper(String url) {
         this.url = url;
     }
 

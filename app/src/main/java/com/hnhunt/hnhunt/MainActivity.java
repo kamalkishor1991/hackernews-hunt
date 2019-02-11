@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private ViewPager viewPager;
-    WebViewFragment comments, orginal;
+    private WebViewFragment comments, original;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(comments = new WebViewFragment());
         adapter.addFragment(newsFragment = new NewsFragment());
-        adapter.addFragment(orginal = new WebViewFragment());
+        adapter.addFragment(original = new WebViewFragment());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
         viewPager.setOffscreenPageLimit(4);
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     mFirebaseAnalytics.logEvent("OnPageSelected", bundle);
 
                     comments.setUrl(obj.getCommentURL());
-                    orginal.setUrl(obj.getURL());
+                    original.setUrl(obj.getURL());
                 }
             }
 
@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             if (viewPager.getCurrentItem() == 0 && comments.canGoBack()) {
                 comments.goBack();
-            } else if (viewPager.getCurrentItem() == 2 && orginal.canGoBack()) {
-                orginal.goBack();
+            } else if (viewPager.getCurrentItem() == 2 && original.canGoBack()) {
+                original.goBack();
             } else {
                 viewPager.setCurrentItem(1);
             }
