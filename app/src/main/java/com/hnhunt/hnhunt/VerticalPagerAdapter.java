@@ -57,13 +57,13 @@ public class VerticalPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return LatestNews.getInstance().getData().size();
+        return LatestNews.getInstance().size();
     }
 
     public void addData(List<Long> list) {
         LatestNews.getInstance().addData(list);
-        LatestNews.getInstance().refreshNextPage((v) -> {
-            runOnUIThread(() -> notifyDataSetChanged());
+        LatestNews.getInstance().refreshNextPage(mContext, (v) -> {
+            notifyDataSetChanged();
         }, (exception) -> {
             //TODO put toast here.
         });
@@ -86,8 +86,9 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
 
-        final long hnId = LatestNews.getInstance().getData().get(position);
         final HnNews hnNews = LatestNews.getInstance().getHnNews(position);
+        final long hnId = hnNews.getHnId();
+
         final String title = hnNews.getTitle();
         final String url = hnNews.getURL();
         String host = getHost(url);
@@ -145,16 +146,15 @@ public class VerticalPagerAdapter extends PagerAdapter {
             FirebaseAnalytics.getInstance(mContext).logEvent("Share_Intent", hnShare);
         });
 
-        runOnUIThread(() -> container.addView(itemView));
+        container.addView(itemView);
 
         if (position + THRESHOLD == LatestNews.getInstance().getLastUpdatedIndex()) {
-            runOnUIThread(() -> {
-                LatestNews.getInstance().refreshNextPage((v) -> {
-                    //notifyDataSetChanged();
-                }, e -> {
-                    FirebaseCrash.log("Network Prob after threshold: " + e);
-                });
+            LatestNews.getInstance().refreshNextPage(mContext, (v) -> {
+                notifyDataSetChanged();
+            }, e -> {
+                FirebaseCrash.log("Network Prob after threshold: " + e);
             });
+
         }
 
 
@@ -175,12 +175,6 @@ public class VerticalPagerAdapter extends PagerAdapter {
                     .centerInside()
                     .into((ImageView) itemView.findViewById(R.id.profileBK));
         }
-    }
-
-    private void runOnUIThread(Runnable runnable) {
-        // Get a handler that can be used to post to the main thread
-        Handler mainHandler = new Handler(mContext.getMainLooper());
-        mainHandler.post(runnable);
     }
 
     @NonNull

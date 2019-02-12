@@ -62,8 +62,6 @@ public class NewsFragment extends Fragment {
             }, (exception) -> {
                 swipeView.setRefreshing(false);
             });
-
-
         });
 
         return rootView;
