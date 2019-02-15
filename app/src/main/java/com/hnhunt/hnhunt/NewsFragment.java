@@ -67,7 +67,7 @@ public class NewsFragment extends Fragment {
         return rootView;
     }
 
-    public HnNews getCurrentPage() {
+    public Hackernews getCurrentPage() {
         return adapter.getHnNews(verticalViewPager.getCurrentItem());
     }
 }

@@ -1,24 +1,41 @@
 package com.hnhunt.hnhunt;
 
+import com.reactiveandroid.Model;
+import com.reactiveandroid.annotation.Column;
+import com.reactiveandroid.annotation.PrimaryKey;
+import com.reactiveandroid.annotation.Table;
+
 import java.util.List;
+@Table(name = "Hackernews", database = AppDatabase.class)
+public class Hackernews extends Model {
 
-public class HnNews {
-    private String by;
-    private long decedents;
+    @PrimaryKey
     private long id;
+    @Column(name = "by")
+    private String by;
+    @Column(name = "decedents")
+    private long decedents;
     private List<Long> kids;
+    @Column(name = "time")
     private long time;
+    @Column (name = "title")
     private String title;
+    @Column (name = "type")
     private String type;
+    @Column (name = "score")
     private long score;
+    @Column (name = "url")
     private String url;
-
+    @Column (name = "summary")
     private String summary;
+    @Column (name = "top_image")
     private String topImage;
 
+    public Hackernews() {
 
-    public HnNews(String by, long decedents, long id, List<Long> kids, long time,
-                  String title, String type, long score, String url) {
+    }
+    public Hackernews(String by, long decedents, long id, List<Long> kids, long time,
+                      String title, String type, long score, String url) {
         this.by = by;
         this.decedents = decedents;
         this.id = id;

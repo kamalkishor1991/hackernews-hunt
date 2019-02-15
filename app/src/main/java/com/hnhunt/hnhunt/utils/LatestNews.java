@@ -5,7 +5,7 @@ import android.os.Handler;
 
 import com.hnhunt.hnhunt.Consumer;
 import com.hnhunt.hnhunt.HackerNewsAPI;
-import com.hnhunt.hnhunt.HnNews;
+import com.hnhunt.hnhunt.Hackernews;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ public class LatestNews {
     private static final int PAGE_SIZE = 3;
     private List<Long> data;
     HashSet<Integer> newsIds;
-    private final Map<Long, HnNews> hnNewsHashMap;
+    private final Map<Long, Hackernews> hnNewsHashMap;
     private volatile int lastIndex = 0;
     private static LatestNews latestNews;
     private LatestNews() {
@@ -37,7 +37,7 @@ public class LatestNews {
     public int getLastUpdatedIndex() {
         return lastIndex;
     }
-    public HnNews getHnNews(int position) {
+    public Hackernews getHnNews(int position) {
         if (position >= lastIndex) throw new RuntimeException("Invalid index");
         return hnNewsHashMap.get(data.get(position));
     }

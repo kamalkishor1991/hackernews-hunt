@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhunt.utils.Newspaper;
+import com.reactiveandroid.query.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.schedulers.Schedulers;
 
 public class HackerNewsAPI {
     public static void topNewsStories(Context context, Consumer<List<Long>> result, Consumer<Exception> exception) {
@@ -48,8 +51,22 @@ public class HackerNewsAPI {
 
 
     private static void getStory(long hnId, JSONObject response,
-                                Consumer<HnNews> result, Consumer<Exception> exception) {
+                                 Consumer<Hackernews> result, Consumer<Exception> exception) {
 
+        Select.from(Hackernews.class).where("id = ?", 1).fetchAsync().
+                doOnError((e) ->  {
+                    exception.accept(new RuntimeException(e));
+                }).
+                subscribeOn(Schedulers.io()).subscribe((List<Hackernews> hnNews) -> {
+                    if (hnNews.isEmpty()) {
+                        fetchStory(hnId, response, result, exception);
+                    } else {
+                        result.accept(hnNews.get(0));
+                    }
+                });
+    }
+
+    private static void fetchStory(long hnId, JSONObject response, Consumer<Hackernews> result, Consumer<Exception> exception) {
         try {
             Log.i("Hackernews api", " id=" + hnId);
             String by = response.getString("by");
@@ -67,16 +84,17 @@ public class HackerNewsAPI {
             String title = response.getString("title");
             String type = response.getString("type");
             String url = response.optString("url", "https://news.ycombinator.com/item?id=" + hnId);
-            HnNews hnNews = new HnNews(by, cts, hnId, kids, time, title, type, score, url);
+            Hackernews hackernews = new Hackernews(by, cts, hnId, kids, time, title, type, score, url);
             try {
-                Newspaper newspaper = new Newspaper(hnNews.getURL());
+                Newspaper newspaper = new Newspaper(hackernews.getURL());
                 newspaper.parse();
-                hnNews.setSummary(newspaper.getSummary());
-                hnNews.setTopImage(newspaper.getTopImage());
+                hackernews.setSummary(newspaper.getSummary());
+                hackernews.setTopImage(newspaper.getTopImage());
             } catch (Throwable e) {
-                FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
+                FirebaseCrash.log("Unable to fetch summary: " + e);
             }
-            result.accept(hnNews);
+            hackernews.save();
+            result.accept(hackernews);
         } catch (JSONException e) {
             e.printStackTrace();
             FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
@@ -85,7 +103,7 @@ public class HackerNewsAPI {
     }
 
     public static void getStory(Context context, long hnId,
-                                Consumer<HnNews> result, Consumer<Exception> exception) {
+                                Consumer<Hackernews> result, Consumer<Exception> exception) {
         Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         RequestQueue mRequestQueue = new RequestQueue(cache, network);

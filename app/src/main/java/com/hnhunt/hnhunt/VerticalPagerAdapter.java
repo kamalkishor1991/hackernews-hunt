@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.text.Spannable;
@@ -68,7 +67,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             //TODO put toast here.
         });
     }
-    public HnNews getHnNews(int position) {
+    public Hackernews getHnNews(int position) {
         return LatestNews.getInstance().getHnNews(position);
     }
 
@@ -86,14 +85,14 @@ public class VerticalPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
 
-        final HnNews hnNews = LatestNews.getInstance().getHnNews(position);
-        final long hnId = hnNews.getHnId();
+        final Hackernews hackernews = LatestNews.getInstance().getHnNews(position);
+        final long hnId = hackernews.getHnId();
 
-        final String title = hnNews.getTitle();
-        final String url = hnNews.getURL();
+        final String title = hackernews.getTitle();
+        final String url = hackernews.getURL();
         String host = getHost(url);
         ((TextView)(itemView.findViewById(R.id.title))).setText(title);
-        String summary = hnNews.getSummary();//obj.getString("summary");
+        String summary = hackernews.getSummary();//obj.getString("summary");
         if (summary == null || summary.equals("") || summary.equalsIgnoreCase("null")) {
             itemView.findViewById(R.id.summary).setVisibility(View.GONE);
             itemView.findViewById(R.id.missing).setVisibility(View.VISIBLE);
@@ -109,13 +108,13 @@ public class VerticalPagerAdapter extends PagerAdapter {
         text.setSpan(new RelativeSizeSpan(0.75f), title.length(), title.length() + host.length() + 1, 0); // set size
         ((TextView)(itemView.findViewById(R.id.title))).setText(text);
 
-        showTopImage(itemView, hnNews);
+        showTopImage(itemView, hackernews);
 
         TextView comments = itemView.findViewById(R.id.comments);
         TextView points = itemView.findViewById(R.id.points);
-        setCommentAndPoints(comments, points, "" + hnNews.getDecedents(), "" + hnNews.getScore());
+        setCommentAndPoints(comments, points, "" + hackernews.getDecedents(), "" + hackernews.getScore());
         ((TextView) itemView.findViewById(R.id.time)).setText("Published: " +
-                Utility.formatTime(new Date(hnNews.getEpochTimeMs())));
+                Utility.formatTime(new Date(hackernews.getEpochTimeMs())));
         ImageButton imageButton = itemView.findViewById(R.id.share);
         Bitmap originalBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share);
 
@@ -161,15 +160,15 @@ public class VerticalPagerAdapter extends PagerAdapter {
         return itemView;
     }
 
-    private void showTopImage(View itemView, HnNews hnNews) {
-        if (hnNews.getTopImage() != null && !hnNews.getTopImage().isEmpty()) {
-            Picasso.with(mContext).load(hnNews.getTopImage())
+    private void showTopImage(View itemView, Hackernews hackernews) {
+        if (hackernews.getTopImage() != null && !hackernews.getTopImage().isEmpty()) {
+            Picasso.with(mContext).load(hackernews.getTopImage())
                     .placeholder(R.drawable.background_default)
                     .fit()
                     .centerInside()
                     .into((ImageView) itemView.findViewById(R.id.profileImageView));
 
-            Picasso.with(mContext).load(hnNews.getTopImage())
+            Picasso.with(mContext).load(hackernews.getTopImage())
                     .placeholder(R.drawable.background_default)
                     .resize(7, 7)
                     .centerInside()

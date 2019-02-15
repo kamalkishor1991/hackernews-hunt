@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                HnNews obj = newsFragment.getCurrentPage();
+                Hackernews obj = newsFragment.getCurrentPage();
                 if (obj != null) {
                     Bundle bundle = new Bundle();
                     bundle.putString("hn_id", obj.getHnId() + "");
