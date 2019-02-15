@@ -86,7 +86,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.news_card, container, false);
 
         final Hackernews hackernews = LatestNews.getInstance().getHnNews(position);
-        final long hnId = hackernews.getHnId();
+        final long hnId = hackernews.getHnId(); //TODO: fix the bug when hnid is coming as null.
 
         final String title = hackernews.getTitle();
         final String url = hackernews.getURL();

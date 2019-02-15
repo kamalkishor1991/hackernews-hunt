@@ -53,7 +53,7 @@ public class HackerNewsAPI {
     private static void getStory(long hnId, JSONObject response,
                                  Consumer<Hackernews> result, Consumer<Exception> exception) {
 
-        Select.from(Hackernews.class).where("id = ?", 1).fetchAsync().
+        Select.from(Hackernews.class).where("id = ?", hnId).fetchAsync().
                 doOnError((e) ->  {
                     exception.accept(new RuntimeException(e));
                 }).
