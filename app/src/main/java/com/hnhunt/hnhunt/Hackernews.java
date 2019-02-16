@@ -109,4 +109,12 @@ public class Hackernews extends Model {
     public void setTopImage(String topImage) {
         this.topImage = topImage;
     }
+
+    public void setDecedents(long decedents) {
+        this.decedents = decedents;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
+    }
 }

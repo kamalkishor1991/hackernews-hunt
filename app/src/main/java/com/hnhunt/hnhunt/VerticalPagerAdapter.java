@@ -146,7 +146,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
         });
 
         container.addView(itemView);
-
+        updateCommentsAndPoints(hackernews, comments, points);
         if (position + THRESHOLD == LatestNews.getInstance().getLastUpdatedIndex()) {
             LatestNews.getInstance().refreshNextPage(mContext, (v) -> {
                 notifyDataSetChanged();
@@ -193,15 +193,18 @@ public class VerticalPagerAdapter extends PagerAdapter {
         points.setText(score +  " points");
     }
 
-    private void updateCommentsAndPoints(final long hnId, final TextView comments, final TextView points) {
+    private void updateCommentsAndPoints(final Hackernews hackernews, final TextView comments, final TextView points) {
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("https://hacker-news.firebaseio.com/v0/item/" + hnId + ".json", null, new JsonHttpResponseHandler() {
+        client.get("https://hacker-news.firebaseio.com/v0/item/" + hackernews.getHnId() + ".json", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     String cts = response.getString("descendants");
                     String score = response.getInt("score") + "";
                     setCommentAndPoints(comments, points, cts, score);
+                    hackernews.setDecedents(Long.parseLong(cts));
+                    hackernews.setScore(Long.parseLong(score));
+                    hackernews.saveAsync();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
