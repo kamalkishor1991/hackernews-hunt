@@ -46,6 +46,7 @@ public class LatestNews {
     }
 
     public void resetData(List<Long> newData) {
+
     }
 
     public void refreshNextPage(Context context, Consumer<Void> callback, Consumer<Exception> exceptionConsumer) {

@@ -34,7 +34,7 @@ public class WebViewFragment extends Fragment {
     }
     public void setUrl(final String url) {
         webView = rootView.findViewById(R.id.webview);
-
+        webView.getSettings().setJavaScriptEnabled(true);
         try {
             ((TextView)rootView.findViewById(R.id.host)).setText(new URL(url).getHost());
         } catch (MalformedURLException e) {
