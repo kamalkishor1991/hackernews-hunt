@@ -1,4 +1,4 @@
-package com.hnhunt.hnhunt;
+package com.hnhunt.hnhuntv2;
 
 import android.content.Context;
 import android.os.Handler;
@@ -14,7 +14,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.crash.FirebaseCrash;
-import com.hnhunt.hnhunt.utils.Newspaper;
+import com.hnhunt.hnhuntv2.utils.Newspaper;
 import com.reactiveandroid.query.Select;
 
 import org.json.JSONArray;

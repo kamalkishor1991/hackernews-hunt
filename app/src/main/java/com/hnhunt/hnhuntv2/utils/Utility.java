@@ -1,4 +1,4 @@
-package com.hnhunt.hnhunt.utils;
+package com.hnhunt.hnhuntv2.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,7 +7,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Cache;

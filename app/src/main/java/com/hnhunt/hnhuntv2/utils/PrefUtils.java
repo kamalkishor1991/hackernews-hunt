@@ -1,18 +1,8 @@
-package com.hnhunt.hnhunt.utils;
+package com.hnhunt.hnhuntv2.utils;
 
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.util.Log;
-
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
 
 public class PrefUtils {
     private static final String TOP_NEWS = "top_news";

@@ -1,4 +1,4 @@
-package com.hnhunt.hnhunt;
+package com.hnhunt.hnhuntv2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +22,8 @@ import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
-import com.hnhunt.hnhunt.utils.LatestNews;
-import com.hnhunt.hnhunt.utils.Utility;
+import com.hnhunt.hnhuntv2.utils.LatestNews;
+import com.hnhunt.hnhuntv2.utils.Utility;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;

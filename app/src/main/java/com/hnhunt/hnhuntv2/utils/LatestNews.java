@@ -1,11 +1,11 @@
-package com.hnhunt.hnhunt.utils;
+package com.hnhunt.hnhuntv2.utils;
 
 import android.content.Context;
 import android.os.Handler;
 
-import com.hnhunt.hnhunt.Consumer;
-import com.hnhunt.hnhunt.HackerNewsAPI;
-import com.hnhunt.hnhunt.Hackernews;
+import com.hnhunt.hnhuntv2.Consumer;
+import com.hnhunt.hnhuntv2.HackerNewsAPI;
+import com.hnhunt.hnhuntv2.Hackernews;
 
 import java.util.ArrayList;
 import java.util.HashSet;

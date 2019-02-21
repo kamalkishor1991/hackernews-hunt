@@ -1,22 +1,10 @@
-package com.hnhunt.hnhunt;
+package com.hnhunt.hnhuntv2;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.google.firebase.crash.FirebaseCrash;
-
-import org.json.JSONArray;
-
-import com.hnhunt.hnhunt.utils.LatestNews;
-import com.hnhunt.hnhunt.utils.Utility;
 
 public class SplashActivity extends AppCompatActivity {
     //Creating a broadcast receiver for gcm registration

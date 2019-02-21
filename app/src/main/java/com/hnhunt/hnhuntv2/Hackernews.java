@@ -1,4 +1,4 @@
-package com.hnhunt.hnhunt;
+package com.hnhunt.hnhuntv2;
 
 import com.reactiveandroid.Model;
 import com.reactiveandroid.annotation.Column;

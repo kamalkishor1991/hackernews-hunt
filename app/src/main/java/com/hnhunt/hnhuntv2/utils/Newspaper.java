@@ -1,4 +1,4 @@
-package com.hnhunt.hnhunt.utils;
+package com.hnhunt.hnhuntv2.utils;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.hnhunt.hnhunt.SplashActivity"
+    tools:context="com.hnhunt.hnhuntv2.SplashActivity"
     tools:showIn="@layout/activity_splash">
 
 </android.support.constraint.ConstraintLayout>
