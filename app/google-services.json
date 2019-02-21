@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "195304253019-u97p2bns1ujl42ifu8jau4d65h8fp6b2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hnhunt.hnhunt",
+            "certificate_hash": "ba0b2ed446def348f8085113621afab404173f25"
+          }
+        },
+        {
           "client_id": "195304253019-5u88avt7p35q3iluitho2qpa30m65soh.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -44,6 +52,37 @@
               "client_type": 3
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195304253019:android:020c5d4e42224901",
+        "android_client_info": {
+          "package_name": "com.hnhunt.hnhuntv2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "195304253019-5u88avt7p35q3iluitho2qpa30m65soh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe4oxyH8evFjisqcRLz4xyZ50iwkUkVlw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
