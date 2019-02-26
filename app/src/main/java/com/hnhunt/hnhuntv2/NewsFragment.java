@@ -1,6 +1,8 @@
 package com.hnhunt.hnhuntv2;
 
 
+import android.app.ProgressDialog;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -17,7 +19,7 @@ public class NewsFragment extends Fragment {
 
     private VerticalViewPager verticalViewPager;
     private VerticalPagerAdapter adapter;
-
+    private ProgressDialog progressDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,7 +31,15 @@ public class NewsFragment extends Fragment {
         verticalViewPager.setAdapter(adapter = new VerticalPagerAdapter(container.getContext()));
 
         final SwipeRefreshLayout swipeView = rootView.findViewById(R.id.swipe);
-        //verticalViewPager.
+        DataSetObserver dataSetObserver = new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (progressDialog != null) progressDialog.cancel();
+
+            }
+        };
+        adapter.registerDataSetObserver(dataSetObserver);
         verticalViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -46,6 +56,9 @@ public class NewsFragment extends Fragment {
 
                 bundle.putString("position", position + "");
                 mFirebaseAnalytics.logEvent("OnCreateViewBriefNews", bundle);
+                if (position == adapter.getCount() - 1) { // last page
+                    progressDialog = showLoading();
+                }
             }
 
             @Override
@@ -65,6 +78,15 @@ public class NewsFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private ProgressDialog showLoading() {
+        ProgressDialog loading  = new ProgressDialog(getContext());
+        loading.setCancelable(true);
+        loading.setMessage("Loading ..");
+        loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        loading.show();
+        return loading;
     }
 
     public Hackernews getCurrentPage() {

@@ -1,7 +1,9 @@
 package com.hnhunt.hnhuntv2;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
@@ -48,10 +50,12 @@ public class VerticalPagerAdapter extends PagerAdapter {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        HackerNewsAPI.topNewsStories(context, response -> {
-            addData(response);
-        }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
 
+        if (LatestNews.getInstance().size() == 0) {
+            HackerNewsAPI.topNewsStories(context, response -> {
+                addData(response);
+            }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
+        }
     }
 
     @Override
@@ -214,6 +218,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
         });
 
     }
+
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
