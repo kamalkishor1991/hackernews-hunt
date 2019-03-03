@@ -88,11 +88,11 @@
 						android:id="@+id/title"
 						android:gravity="left"
 						android:ellipsize="marquee"
-						android:textColor="#121212"
-						android:text="This is a news asa sas asa sa s as as aaas as as as as as atitle"
+						android:textColor="#000000"
+						android:text="	A listing of companies that don't do whiteboard job interviews"
 						android:layout_width="wrap_content"
 						android:layout_marginBottom="10dp"
-						android:textSize="16sp"
+						android:textSize="20sp"
 						android:textStyle="normal"
 						android:layout_height="wrap_content"/>
 
@@ -100,14 +100,14 @@
 				<TextView
 					android:id="@+id/summary"
 					android:fontFamily="sans-serif-light"
-					android:textColor="#121212"
+					android:textColor="#000000"
 					android:lineSpacingExtra="5dp"
 					android:text="Computer science is the study of the theory, experimentation, and engineering that form the basis for the design and use of computers. It is the scientific and practical approach to computation and its applications and the systematic study of the feasibility, structure, expression, and mechanization of the methodical procedures (or algorithms) that underlie the acquisition, representation, processing, storage, communication of, and access to information. An alternate, more succinct definition of computer science is the study of automating algorithmic processes that scale. A computer scientist specializes in the theory of computation and the design of computational systems.[1]"
 					android:layout_width="wrap_content"
 					android:ellipsize="end"
 					android:maxLines="8"
 					android:layout_height="wrap_content"
-					android:textSize="14sp"
+					android:textSize="16sp"
 					android:textStyle="normal"/>
 				<TextView
 					android:id="@+id/missing"
@@ -149,22 +149,35 @@
 					android:layout_height="wrap_content">
 
 					<TextView
-						android:id="@+id/points"
-						android:text="21 points"
-						android:textSize="10dp"
+						android:id="@+id/number"
+						android:text="#21"
+						android:textSize="12sp"
 						android:textColor="#fff"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content" />
 					<TextView
 						android:layout_width="wrap_content"
 						android:text="  |  "
-						android:textSize="10dp"
+						android:textSize="12sp"
+						android:textColor="#fff"
+						android:layout_height="wrap_content" />
+					<TextView
+						android:id="@+id/points"
+						android:text="21 points"
+						android:textSize="12sp"
+						android:textColor="#fff"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" />
+					<TextView
+						android:layout_width="wrap_content"
+						android:text="  |  "
+						android:textSize="12sp"
 						android:textColor="#fff"
 						android:layout_height="wrap_content" />
 					<TextView
 						android:id="@+id/comments"
 						android:text="21 comments"
-						android:textSize="10dp"
+						android:textSize="12sp"
 						android:textColor="#fff"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content" />
@@ -179,7 +192,7 @@
 					android:layout_height="wrap_content"
 					android:text="Published: 10 min ago"
 					android:textColor="#FFF"
-					android:textSize="10dp" />
+					android:textSize="12sp" />
 
 			</LinearLayout>
 			<TextView

@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch;
 public class LatestNews {
     private static final int PAGE_SIZE = 3;
     private List<Long> data;
-    HashSet<Integer> newsIds;
+    private HashSet<Integer> newsIds;
     private final Map<Long, Hackernews> hnNewsHashMap;
     private volatile int lastIndex = 0;
     private static LatestNews latestNews;

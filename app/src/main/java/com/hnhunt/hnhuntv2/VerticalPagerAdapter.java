@@ -115,7 +115,9 @@ public class VerticalPagerAdapter extends PagerAdapter {
         showTopImage(itemView, hackernews);
 
         TextView comments = itemView.findViewById(R.id.comments);
+        TextView number = itemView.findViewById(R.id.number);
         TextView points = itemView.findViewById(R.id.points);
+        number.setText("#" + (position + 1));
         setCommentAndPoints(comments, points, "" + hackernews.getDecedents(), "" + hackernews.getScore());
         ((TextView) itemView.findViewById(R.id.time)).setText("Published: " +
                 Utility.formatTime(new Date(hackernews.getEpochTimeMs())));
