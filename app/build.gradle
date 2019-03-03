@@ -8,8 +8,8 @@ android {
         applicationId "com.hnhunt.hnhuntv2"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 3
-        versionName "2.5"
+        versionCode 4
+        versionName "2.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi-v7a", "x86"
