@@ -83,7 +83,7 @@ public class NewsFragment extends Fragment {
     private ProgressDialog showLoading() {
         ProgressDialog loading  = new ProgressDialog(getContext());
         loading.setCancelable(true);
-        loading.setMessage("Loading ..");
+        loading.setMessage("Loading more news....");
         loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         loading.show();
         return loading;
