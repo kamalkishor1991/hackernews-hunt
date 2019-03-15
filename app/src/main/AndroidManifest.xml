@@ -42,7 +42,7 @@
 				<category android:name="com.gnirt69.gcmexample"/>
 			</intent-filter>
 		</receiver>
-
+		<meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
 
     </application>
 	<uses-permission android:name="android.permission.INTERNET" />
