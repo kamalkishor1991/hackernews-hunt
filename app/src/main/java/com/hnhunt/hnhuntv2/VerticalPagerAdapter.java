@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhuntv2.utils.LatestNews;
 import com.hnhunt.hnhuntv2.utils.Utility;
 import com.loopj.android.http.AsyncHttpClient;
@@ -54,7 +53,9 @@ public class VerticalPagerAdapter extends PagerAdapter {
         if (LatestNews.getInstance().size() == 0) {
             HackerNewsAPI.topNewsStories(context, response -> {
                 addData(response);
-            }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
+            }, error -> {
+                // FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error)
+            });
         }
     }
 
@@ -157,7 +158,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
             LatestNews.getInstance().refreshNextPage(mContext, (v) -> {
                 notifyDataSetChanged();
             }, e -> {
-                FirebaseCrash.log("Network Prob after threshold: " + e);
+                //FirebaseCrash.log("Network Prob after threshold: " + e);
             });
 
         }
@@ -213,7 +214,7 @@ public class VerticalPagerAdapter extends PagerAdapter {
                     hackernews.saveAsync();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
+                    // FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
                     //TODO: put toast here ~ unable to update comments and points info
                 }
             }

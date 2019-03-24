@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhuntv2.utils.LatestNews;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
         HackerNewsAPI.topNewsStories(this, response -> {
             pd.cancel();
             addData(response);
-        }, error -> FirebaseCrash.log("Network Prob on VerticalPagerAdapter: " + error));
+        }, error -> {});
     }
 
     public void addData(List<Long> list) {

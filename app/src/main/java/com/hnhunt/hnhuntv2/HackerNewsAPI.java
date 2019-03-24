@@ -13,7 +13,6 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.firebase.crash.FirebaseCrash;
 import com.hnhunt.hnhuntv2.utils.Newspaper;
 import com.reactiveandroid.query.Select;
 
@@ -91,13 +90,13 @@ public class HackerNewsAPI {
                 hackernews.setSummary(newspaper.getSummary());
                 hackernews.setTopImage(newspaper.getTopImage());
             } catch (Throwable e) {
-                FirebaseCrash.log("Unable to fetch summary: " + e);
+                //FirebaseCrash.log("Unable to fetch summary: " + e);
             }
             hackernews.save();
             result.accept(hackernews);
         } catch (JSONException e) {
             e.printStackTrace();
-            FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
+           // FirebaseCrash.log("Unable to fetch comments and points from hn api: " + e);
             exception.accept(e);
         }
     }

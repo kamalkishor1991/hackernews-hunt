@@ -20,7 +20,6 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -87,7 +86,6 @@ public class Utility {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        FirebaseCrash.log("Network Prob on Utility: " + error);
                         Toast.makeText(context, "Network Problem", Toast.LENGTH_SHORT).show();
 
 
